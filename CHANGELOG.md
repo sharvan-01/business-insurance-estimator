@@ -1,5 +1,13 @@
 # @plum_growth/business-insurance-otc
 
+## 1.2.0
+
+### Minor Changes
+
+- 479e6c4: Added HS functionality and data fields
+- 6109da5: Added HS code
+- 0576d08: Added the HS file to be committed
+
 ## 1.1.0
 
 ### Minor Changes
