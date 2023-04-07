@@ -1,7 +1,7 @@
 /* eslint-disable prefer-destructuring */
 //generate OTP
 var phone;
-
+console.log('OTP file loaded');
 //when the button before the OTP screen is clicked, send the OTP
 
 $('#second-continue').on('click', function () {
