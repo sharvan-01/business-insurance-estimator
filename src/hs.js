@@ -3,6 +3,7 @@ import axios from 'axios';
 import { values } from './indexedDB.js';
 
 const properties = values;
+
 sendDataToHS();
 {
   axios({
