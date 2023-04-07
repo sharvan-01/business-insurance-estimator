@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { values } from './indexedDB.js';
+import { values } from './index.js';
 
 const properties = values;
 
