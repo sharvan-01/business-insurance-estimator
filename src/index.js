@@ -18,7 +18,19 @@ $('#first-continue-button').on('click', function () {
 $('#second-continue').on('click', function () {
   companyName = $('#company-name').val();
   $('#insert-company-name')[0].innerHTML = companyName;
+
+  //getting all the input values and sending them to the HS file
+  const inputs = document.querySelectorAll('input[data-place="second"]');
+  inputs.forEach((input) => {
+    const internalName = input.dataset.internalName;
+    const value = input.value;
+    values[internalName] = value;
+  });
+  console.log('priting values of fields');
+  console.log(values); // { firstname: "John", lastname: "Doe" }
+  sendDataToHS();
 });
+export { values };
 
 //when industry is selected call the products API
 $('#industry').change(function () {
@@ -428,6 +440,7 @@ var industryID = 2,
   assetCost = 0,
   nameOfPerson,
   grandTotal = 0;
+const values = {};
 const productsAPI = new URL(
   `https://x8ki-letl-twmt.n7.xano.io/api:MR0gzHqf/industry?id=${industryID}`
 );
