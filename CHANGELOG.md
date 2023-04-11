@@ -1,5 +1,14 @@
 # @plum_growth/business-insurance-otc
 
+## 1.3.1
+
+### Patch Changes
+
+- 4314c25: Changed the node version to 18 to suit vercel
+- 2003e54: Nothing new
+- 81be91d: Changed version of node
+- 531f997: Removed that locker file for pnpm
+
 ## 1.3.0
 
 ### Minor Changes
