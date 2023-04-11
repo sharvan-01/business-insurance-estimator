@@ -13,6 +13,7 @@ const ENTRY_POINTS = [
   'src/wcwnc.js',
   'src/hs.js',
   'src/sharableURL.js',
+  'src/mobileVersion.js',
 ];
 
 // Config dev serving

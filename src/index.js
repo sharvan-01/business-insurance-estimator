@@ -234,9 +234,9 @@ $('#avg-cost').change(function () {
   totalPrice = parseInt(assetCost) + parseInt(totalPrice);
   chosenProductsMap = chosenProductsMap.set('ai', new Map([['price', assetCost]]));
   $("[data-si='ai']").val = assetCost;
-  const total = $('#total');
-  const gst = $('#gst');
-  const grandTotalElement = $('#grand-total');
+  const total = $("[data-element='total']")[0];
+  const gst = $("[data-element='gst']")[0];
+  const grandTotalElement = $("[data-element='grandTotal']")[0];
   total[0].innerHTML = totalPrice.toLocaleString('en-IN', {
     maximumFractionDigits: 0,
     style: 'currency',
@@ -295,10 +295,10 @@ function crimeInsurance(selectStatus) {
 }
 
 function calculation(productCode, selectStatus) {
-  const total = $('#total');
-  const gst = $('#gst');
   console.log(gst);
-  const grandTotalElement = $('#grand-total');
+  const total = $("[data-element='total']")[0];
+  const gst = $("[data-element='gst']")[0];
+  const grandTotalElement = $("[data-element='grandTotal']")[0];
   const prodDeets = chosenProductsMap.get(productCode);
   const price = prodDeets.get('price');
 
