@@ -321,17 +321,17 @@ function calculation(productCode, selectStatus) {
     totalPrice = parseInt(totalPrice) + parseInt(price);
     grandTotal = parseInt(totalPrice) * 0.18 + parseInt(totalPrice);
     gstPrice = parseInt(totalPrice) * 0.18;
-    total[0].innerHTML = totalPrice.toLocaleString('en-IN', {
+    total.innerHTML = totalPrice.toLocaleString('en-IN', {
       maximumFractionDigits: 0,
       style: 'currency',
       currency: 'INR',
     });
-    grandTotalElement[0].innerHTML = grandTotal.toLocaleString('en-IN', {
+    grandTotalElement.innerHTML = grandTotal.toLocaleString('en-IN', {
       maximumFractionDigits: 0,
       style: 'currency',
       currency: 'INR',
     });
-    gst[0].innerHTML = gstPrice.toLocaleString('en-IN', {
+    gst.innerHTML = gstPrice.toLocaleString('en-IN', {
       maximumFractionDigits: 0,
       style: 'currency',
       currency: 'INR',
