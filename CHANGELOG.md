@@ -1,5 +1,16 @@
 # @plum_growth/business-insurance-otc
 
+## 1.3.0
+
+### Minor Changes
+
+- 76e2bd4: Added shareable URL file and made a lot of code updates
+- c4df2a9: Built the code
+
+### Patch Changes
+
+- 76e2bd4: Fixed a typo
+
 ## 1.2.0
 
 ### Minor Changes
