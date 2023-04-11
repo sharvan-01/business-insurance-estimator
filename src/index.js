@@ -3,9 +3,7 @@
 
 import axios from 'axios';
 
-$(function () {
-  $('#yearOfIncorp').datepicker({ dateFormat: 'yy' });
-});
+$('#yearOfIncorp').datepicker({ dateFormat: 'yy' });
 
 function listIndustries(data) {
   const industryOption = Object.entries(data);
