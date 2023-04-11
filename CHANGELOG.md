@@ -1,5 +1,11 @@
 # @plum_growth/business-insurance-otc
 
+## 1.3.2
+
+### Patch Changes
+
+- 69e4fb4: Changed to a lower version of node
+
 ## 1.3.1
 
 ### Patch Changes
