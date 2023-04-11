@@ -1,9 +1,13 @@
 /* eslint-disable prefer-destructuring */
 //adding industries to the SELECT field on the UI
+
+import axios from 'axios';
+
 function listIndustries(data) {
   const industryOption = Object.entries(data);
   industryOption.forEach((element) => {
-    $('#industry').append(
+    // console.log(element);
+    $('#bi-industry').append(
       `<option value="` + element[1].id + `">` + element[1].Industry_name + `</option>`
     );
   });
@@ -16,25 +20,51 @@ $('#first-continue-button').on('click', function () {
 });
 
 $('#second-continue').on('click', function () {
+  console.log('second continue button clicked');
+  industryID = $('#bi-industry').val();
+  console.log(industryID);
+  productsAPI.search = '?id=' + industryID;
+  apiFetch(productsAPI);
   companyName = $('#company-name').val();
   $('#insert-company-name')[0].innerHTML = companyName;
 
   //getting all the input values and sending them to the HS file
   const inputs = document.querySelectorAll('input[data-place="second"]');
   inputs.forEach((input) => {
-    const internalName = input.dataset.internalName;
+    const internalName = input.dataset.internalname;
     const value = input.value;
     values[internalName] = value;
   });
   console.log('priting values of fields');
   console.log(values); // { firstname: "John", lastname: "Doe" }
-  sendDataToHS();
+  //beging the HS code
+  sendDataToHS(values);
 });
-export { values };
+
+function sendDataToHS(properties) {
+  axios({
+    method: 'POST',
+    url: 'https://api.hubspot.com/crm/v3/objects/contacts',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer pat-na1-fea61155-8e9d-4493-9f3b-1d8d2359aca1`,
+    },
+    data: {
+      properties,
+    },
+  })
+    .then((response) => {
+      console.log(response.data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
 
 //when industry is selected call the products API
-$('#industry').change(function () {
-  industryID = $('#industry').val();
+$('#bi-industry').change(function () {
+  console.log('change event triggered');
+  industryID = $('#bi-industry').val();
   console.log(industryID);
   productsAPI.search = '?id=' + industryID;
   apiFetch(productsAPI);
@@ -51,6 +81,8 @@ $('#last-financial-year-revenue').change(function () {
 });
 
 $('#fourth-continue-button').on('click', function () {
+  console.log('industry ID');
+  console.log(industryID);
   resetAllValues();
   products.forEach((element) => {
     // finding all elements that have a recommendation of no and disabling them
@@ -368,6 +400,7 @@ async function apiFetch(api) {
       saveProductData(data);
     });
 }
+// export { apiFetch };
 
 function saveProductData(data) {
   products = Object.entries(data);
@@ -454,6 +487,8 @@ var productNamesMap = new Map([
   ['cd', 'Crime and Dishonesty'],
 ]);
 const industryAPI = 'https://x8ki-letl-twmt.n7.xano.io/api:MR0gzHqf/get-all-industries';
+
+// module.exports = { products };
 var recommendedPlans = [];
 //apiFetch(productsAPI); //at this point we have all the products related to the users industry
 

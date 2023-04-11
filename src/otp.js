@@ -5,12 +5,10 @@ console.log('OTP file loaded');
 //when the button before the OTP screen is clicked, send the OTP
 
 $('#second-continue').on('click', function () {
-  sendData();
-
   $('#resend-otp-button').prop('disabled', true);
   // $("#otp-continue-button").prop("disabled", true);
   phone = $('#phone').val();
-  email = $;
+  // email = $('#bi-email').val();
   phone = parseInt(phone);
   phone = '+91' + phone;
   getOTP(phone); //get the OTP for this phone number
