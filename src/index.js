@@ -126,7 +126,7 @@ $('.bi-plan').on('click', function (e) {
   console.log('the product code');
   console.log(productCode);
 
-  if (e.target.attributes[1].value === 'learn') {
+  if (e.target.attributes[1] && e.target.attributes[1].value === 'learn') {
     console.log('click on learn ');
     return;
   }
