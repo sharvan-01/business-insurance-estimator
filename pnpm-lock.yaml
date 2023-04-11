@@ -14,8 +14,8 @@ dependencies:
     specifier: ^17.9.1
     version: 17.9.1
   pnpm:
-    specifier: ^8.1.1
-    version: 8.1.1
+    specifier: ^8.2.0
+    version: 8.2.0
   require:
     specifier: ^0.4.4
     version: 0.4.9
@@ -2524,8 +2524,8 @@ packages:
     hasBin: true
     dev: true
 
-  /pnpm@8.1.1:
-    resolution: {integrity: sha512-XLzcc4O8YrqfQ1+qjPtHGDFcdUeno2Zk+kuuSc9CagIiY8y4uhnqQ2B7jW8tgwQDNmehewGZuqrAoskgCkbTnw==}
+  /pnpm@8.2.0:
+    resolution: {integrity: sha512-f2/abl6GycxLgVZQtWA2zBJKMXcv2L86HGRwJ4qnS02gVzLgtFegC25qWKFtUunCY74GUwxq2A7yGAJEyOuCYg==}
     engines: {node: '>=16.14'}
     hasBin: true
     dev: false
