@@ -1,5 +1,11 @@
 # @plum_growth/business-insurance-otc
 
+## 1.4.0
+
+### Minor Changes
+
+- f5ef768: Fixed the learn more error
+
 ## 1.3.2
 
 ### Patch Changes
