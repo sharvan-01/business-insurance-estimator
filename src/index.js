@@ -295,7 +295,6 @@ function crimeInsurance(selectStatus) {
 }
 
 function calculation(productCode, selectStatus) {
-  console.log(gst);
   const total = $("[data-element='total']")[0];
   const gst = $("[data-element='gst']")[0];
   const grandTotalElement = $("[data-element='grandTotal']")[0];
