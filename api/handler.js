@@ -1,22 +1,43 @@
-sendDataToHS();
-function sendDataToHS() {
-  axios({
-    method: 'POST',
-    url: 'https://api.hubspot.com/crm/v3/objects/contacts',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer pat-na1-fea61155-8e9d-4493-9f3b-1d8d2359aca1`,
+import axios from 'axios';
+
+export const config = {
+  api: {
+    cors: {
+      origin: 'https://webdev.plumhq.com',
     },
-    data: {
-      email: 'business@businessssss.com',
-      firstname: 'sharvan',
-      lastname: 'business',
-    },
-  })
-    .then((response) => {
+  },
+};
+
+export default async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', 'https://webdev.plumhq.com');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
+
+  if (req.method === 'POST') {
+    const { firstName, lastName, email } = req.body;
+    const hubspotToken = process.env.HS_TOKEN;
+    const hubspotEndpoint = `https://api.hubapi.com/contacts/v1/contact?hapikey=${hubspotToken}`;
+
+    try {
+      const response = await axios.post(hubspotEndpoint, {
+        properties: [
+          { property: 'email', value: email },
+          { property: 'firstname', value: firstName },
+          { property: 'lastname', value: lastName },
+        ],
+      });
       console.log(response.data);
-    })
-    .catch((error) => {
+      res.status(200).json({ message: 'Contact created successfully.' });
+    } catch (error) {
       console.error(error);
-    });
+      res.status(500).json({ message: 'Failed to create contact.' });
+    }
+  } else {
+    res.status(405).json({ message: 'Method not allowed.' });
+  }
 }

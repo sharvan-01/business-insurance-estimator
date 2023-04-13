@@ -14,7 +14,6 @@ const ENTRY_POINTS = [
   'src/hs.js',
   'src/sharableURL.js',
   'src/mobileVersion.js',
-  'api/handler.js',
 ];
 
 // Config dev serving

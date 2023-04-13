@@ -39,8 +39,33 @@ $('#second-continue').on('click', function () {
   console.log('priting values of fields');
   console.log(values); // { firstname: "John", lastname: "Doe" }
   //beging the HS code
-  sendDataToHS(values);
+  createContact();
 });
+
+async function createContact() {
+  const properties = {
+    firstName: 'John',
+    lastName: 'Doe',
+    email: 'john.doe@example.com',
+  };
+
+  try {
+    const response = await fetch(
+      'https://business-insurance-estimator-qod7dyl6g-sharvan-01.vercel.app/api/handler',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(properties),
+      }
+    );
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 //when industry is selected call the products API
 $('#bi-industry').change(function () {
