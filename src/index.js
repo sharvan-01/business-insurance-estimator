@@ -27,6 +27,7 @@ $('#second-continue').on('click', function () {
   apiFetch(productsAPI);
   companyName = $('#company-name').val();
   $('#insert-company-name')[0].innerHTML = companyName;
+  $('#insert-company-2')[0].innerHTML = companyName;
 
   //getting all the input values and sending them to the HS file
   const inputs = document.querySelectorAll('input[data-place="second"]');
@@ -286,7 +287,7 @@ function crimeInsurance(selectStatus) {
       newElement.setAttribute('data-price', 'cd');
       newElement.style.display = 'flex';
       newElement.childNodes[0].innerHTML = productNamesMap.get('cd');
-      newElement.childNodes[1].innerHTML = 'Contact sales';
+      newElement.childNodes[1].innerHTML = 'Schedule a call';
       $('.final-pricing-wrapper').append(newElement);
     }
   } else {
