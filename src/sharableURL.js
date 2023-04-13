@@ -51,7 +51,7 @@ function fillInValues(estimate) {
   form[9].value = estimate.Last_financial_year_revenue;
   $('#first-continue-button').click();
   $('#second-continue').click();
-  var industryInput = $('#bi-industry')[0];
+  var industryInput = $('#bi-industry');
   industryInput.trigger('change');
   $('otp-continue-button').click();
   $('#fourth-continue-button').click();
