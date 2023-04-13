@@ -1,5 +1,11 @@
 # @plum_growth/business-insurance-otc
 
+## 1.5.0
+
+### Minor Changes
+
+- ed92b28: Added the mobile version code
+
 ## 1.4.0
 
 ### Minor Changes
