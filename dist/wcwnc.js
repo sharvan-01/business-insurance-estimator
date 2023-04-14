@@ -115,6 +115,7 @@
     }
   };
   var modal = $("#bi-modal");
+  var callback = $("#bi-modal-2");
   var close = $("#bi-modal-close");
   $("[data-element='learn']").on("click", function() {
     var productCode = $(this).attr("data-product");
@@ -136,8 +137,12 @@
     $("[data-modal='whatsNot'] [data-modal-list='three']")[0].innerHTML = product.whatsNot[0].three;
     $("[data-modal='whatsNot'] [data-modal-list='four']")[0].innerHTML = product.whatsNot[0].four;
   });
-  close.on("click", function() {
+  $("#final-submit").on("click", function() {
+    callback.css("display", "flex");
+  });
+  $("[data-element='close']").on("click", function() {
     modal.css("display", "none");
+    callback.css("display", "none");
   });
 })();
 //# sourceMappingURL=wcwnc.js.map

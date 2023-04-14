@@ -174,7 +174,7 @@ $('.bi-plan').on('click', function (e) {
   }
 
   if (productCode === 'cd') {
-    const RadioButton = $(`[data-checkbox=${productCode}]`);
+    const RadioButton = $("[data-checkbox='cd']");
     checkTheCheckbox(RadioButton, productCode);
     selectStatus = RadioButton[0].childNodes[2].checked;
     crimeInsurance(selectStatus);
@@ -444,9 +444,11 @@ function checkTheCheckbox(radioButton, productName) {
     radioButton[0].childNodes[0].style.display = 'block';
     radioButton[0].childNodes[2].checked = true;
     radioButton[0].childNodes[1].classList.add('w--redirected-checked');
-    radioButton[1].childNodes[0].style.display = 'block';
-    radioButton[1].childNodes[2].checked = true;
-    radioButton[1].childNodes[1].classList.add('w--redirected-checked');
+    if (radioButton[1]) {
+      radioButton[1].childNodes[0].style.display = 'block';
+      radioButton[1].childNodes[2].checked = true;
+      radioButton[1].childNodes[1].classList.add('w--redirected-checked');
+    }
     var tempProd = $(`[data-product='${productName}']`);
     tempProd.addClass('selected');
   }
