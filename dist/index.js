@@ -53,6 +53,10 @@
       }
     });
     findRecommendedProducts(products);
+  });
+  $("#final-submit").on("click", function() {
+    console.log("priting map");
+    console.log(chosenProductsMap);
     const inputs = document.querySelectorAll('input[data-place="userInput"]');
     inputs.forEach((input) => {
       const internalName = input.dataset.internalname;

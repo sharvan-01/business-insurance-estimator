@@ -109,6 +109,14 @@ $('#fourth-continue-button').on('click', function () {
   findRecommendedProducts(products);
 
   //getting all the input values and sending them to the HS file
+  // { firstname: "John", lastname: "Doe" }
+
+  // createContact(values);
+});
+
+$('#final-submit').on('click', function () {
+  console.log('priting map');
+  console.log(chosenProductsMap);
   const inputs = document.querySelectorAll('input[data-place="userInput"]');
   inputs.forEach((input) => {
     const internalName = input.dataset.internalname;
@@ -116,9 +124,7 @@ $('#fourth-continue-button').on('click', function () {
     values[internalName] = value;
   });
   console.log('priting values of input fields');
-  console.log(values); // { firstname: "John", lastname: "Doe" }
-
-  // createContact(values);
+  console.log(values);
 });
 
 function resetAllValues() {
