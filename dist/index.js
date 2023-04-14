@@ -26,6 +26,24 @@
   });
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
+  async function createContact(properties) {
+    try {
+      const response = await fetch(
+        "https://business-insurance-estimator-sharvan-01.vercel.app/api/handler",
+        {
+          method: "POST",
+          headers: myHeaders,
+          body: JSON.stringify({ properties }),
+          mode: "cors"
+        }
+      );
+      const data = await response.json();
+      hubspotID = data.id;
+      console.log("the identifier is: " + hubspotID);
+    } catch (error) {
+      console.error(error);
+    }
+  }
   $("#bi-industry").change(function() {
     console.log("change event triggered");
     industryID = $("#bi-industry").val();
@@ -65,6 +83,7 @@
     });
     console.log("priting values of input fields");
     console.log(values);
+    createContact(values);
   });
   function resetAllValues() {
     products.forEach((element) => {
@@ -432,6 +451,7 @@
   var nameOfPerson;
   var aiSelectStatus = false;
   var grandTotal = 0;
+  var hubspotID;
   var values = {};
   var productsAPI = new URL(
     `https://x8ki-letl-twmt.n7.xano.io/api:MR0gzHqf/industry?id=${industryID}`

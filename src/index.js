@@ -125,6 +125,7 @@ $('#final-submit').on('click', function () {
   });
   console.log('priting values of input fields');
   console.log(values);
+  createContact(values);
 });
 
 function resetAllValues() {
