@@ -280,17 +280,17 @@ $('#avg-cost').change(function () {
   const total = $("[data-element='total']")[0];
   const gst = $("[data-element='gst']")[0];
   const grandTotalElement = $("[data-element='grandTotal']")[0];
-  total[0].innerHTML = totalPrice.toLocaleString('en-IN', {
+  total.innerHTML = totalPrice.toLocaleString('en-IN', {
     maximumFractionDigits: 0,
     style: 'currency',
     currency: 'INR',
   });
-  grandTotalElement[0].innerHTML = grandTotal.toLocaleString('en-IN', {
+  grandTotalElement.innerHTML = grandTotal.toLocaleString('en-IN', {
     maximumFractionDigits: 0,
     style: 'currency',
     currency: 'INR',
   });
-  gst[0].innerHTML = gstPrice.toLocaleString('en-IN', {
+  gst.innerHTML = gstPrice.toLocaleString('en-IN', {
     maximumFractionDigits: 0,
     style: 'currency',
     currency: 'INR',
