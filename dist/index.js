@@ -1,8 +1,5 @@
 "use strict";
 (() => {
-  // bin/live-reload.js
-  new EventSource(`${"http://localhost:3000"}/esbuild`).addEventListener("change", () => location.reload());
-
   // src/index.js
   function listIndustries(data) {
     const industryOption = Object.entries(data);
@@ -26,39 +23,9 @@
     companyName = $("#company-name").val();
     $("#insert-company-name")[0].innerHTML = companyName;
     $("#insert-company-2")[0].innerHTML = companyName;
-    const inputs = document.querySelectorAll('input[data-place="second"]');
-    inputs.forEach((input) => {
-      const internalName = input.dataset.internalname;
-      const value = input.value;
-      values[internalName] = value;
-    });
-    console.log("priting values of fields");
-    console.log(values);
-    createContact();
   });
-  async function createContact() {
-    const properties = {
-      firstName: "John",
-      lastName: "Doe",
-      email: "john.doe@example.com"
-    };
-    try {
-      const response = await fetch(
-        "https://business-insurance-estimator-qod7dyl6g-sharvan-01.vercel.app/api/handler",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(properties)
-        }
-      );
-      const data = await response.json();
-      console.log(data);
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
   $("#bi-industry").change(function() {
     console.log("change event triggered");
     industryID = $("#bi-industry").val();
@@ -86,6 +53,14 @@
       }
     });
     findRecommendedProducts(products);
+    const inputs = document.querySelectorAll('input[data-place="userInput"]');
+    inputs.forEach((input) => {
+      const internalName = input.dataset.internalname;
+      const value = input.value;
+      values[internalName] = value;
+    });
+    console.log("priting values of input fields");
+    console.log(values);
   });
   function resetAllValues() {
     products.forEach((element) => {
@@ -117,12 +92,12 @@
       console.log("click on learn ");
       return;
     }
-    if (productCode === "ai" && document.querySelector("[data-price = 'ai']") === null) {
+    if (productCode === "ai") {
       console.log("asset insurance is working");
-      assetInsurance();
       const assetRadioButton = $(`[data-checkbox=${productCode}]`);
       checkTheCheckbox(assetRadioButton, productCode);
-      selectStatus = assetRadioButton[0].childNodes[2].checked;
+      aiSelectStatus = assetRadioButton[0].childNodes[2].checked;
+      assetInsurance(aiSelectStatus);
       return;
     }
     if (productCode === "cd") {
@@ -200,6 +175,16 @@
     else
       $(`[data-si='${selectedProduct}']`).prop("disabled", true);
   }
+  function assetInsuranceFieldStatus(aiSelectStatus2) {
+    var elements = $("[data-si ='ai']");
+    if (!aiSelectStatus2) {
+      elements[0].disabled = true;
+      elements[1].disabled = true;
+    } else {
+      elements[0].disabled = false;
+      elements[1].disabled = false;
+    }
+  }
   $("#no-of-assets").change(function() {
     noOfAssets = $("#no-of-assets").val();
   });
@@ -235,17 +220,25 @@
       currency: "INR"
     });
   });
-  function assetInsurance() {
-    const newElement = $(".pricing-holder")[0].cloneNode(true);
-    newElement.setAttribute("data-price", "ai");
-    newElement.style.display = "flex";
-    newElement.childNodes[0].innerHTML = productNamesMap.get("ai");
-    newElement.childNodes[1].innerHTML = parseInt(assetCost).toLocaleString("en-IN", {
-      maximumFractionDigits: 0,
-      style: "currency",
-      currency: "INR"
-    });
-    $(".final-pricing-wrapper").append(newElement);
+  function assetInsurance(aiSelectStatus2) {
+    assetInsuranceFieldStatus(aiSelectStatus2);
+    if (aiSelectStatus2) {
+      if (!document.querySelector(`[data-price='ai']`)) {
+        const newElement = $(".pricing-holder")[0].cloneNode(true);
+        newElement.setAttribute("data-price", "ai");
+        newElement.style.display = "flex";
+        newElement.childNodes[0].innerHTML = productNamesMap.get("ai");
+        newElement.childNodes[1].innerHTML = parseInt(assetCost).toLocaleString("en-IN", {
+          maximumFractionDigits: 0,
+          style: "currency",
+          currency: "INR"
+        });
+        $(".final-pricing-wrapper").append(newElement);
+      }
+    } else {
+      const dataPrice = $("[data-price='ai']");
+      dataPrice[0].style.display = "none";
+    }
     return;
   }
   function crimeInsurance(selectStatus2) {
@@ -344,12 +337,18 @@
       radioButton[0].childNodes[0].style.display = "none";
       radioButton[0].childNodes[2].checked = false;
       radioButton[0].childNodes[1].classList.remove("w--redirected-checked");
+      radioButton[1].childNodes[0].style.display = "none";
+      radioButton[1].childNodes[2].checked = false;
+      radioButton[1].childNodes[1].classList.remove("w--redirected-checked");
       var tempProd = $(`[data-product='${productName}']`);
       tempProd.removeClass("selected");
     } else {
       radioButton[0].childNodes[0].style.display = "block";
       radioButton[0].childNodes[2].checked = true;
       radioButton[0].childNodes[1].classList.add("w--redirected-checked");
+      radioButton[1].childNodes[0].style.display = "block";
+      radioButton[1].childNodes[2].checked = true;
+      radioButton[1].childNodes[1].classList.add("w--redirected-checked");
       var tempProd = $(`[data-product='${productName}']`);
       tempProd.addClass("selected");
     }
@@ -377,6 +376,7 @@
           fundingRound,
           revenueAmount
         );
+        assetInsuranceFieldStatus(aiSelectStatus);
         setSumInsuredFieldStatus(element[0], true);
         changeSumInsured(element[0], largestSI);
         calculation(element[0], radioButton[0].childNodes[2].checked);
@@ -420,6 +420,7 @@
   var valueOfAssets = 0;
   var assetCost = 0;
   var nameOfPerson;
+  var aiSelectStatus = false;
   var grandTotal = 0;
   var values = {};
   var productsAPI = new URL(

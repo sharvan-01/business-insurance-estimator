@@ -28,44 +28,52 @@ $('#second-continue').on('click', function () {
   companyName = $('#company-name').val();
   $('#insert-company-name')[0].innerHTML = companyName;
   $('#insert-company-2')[0].innerHTML = companyName;
-
-  //getting all the input values and sending them to the HS file
-  const inputs = document.querySelectorAll('input[data-place="second"]');
-  inputs.forEach((input) => {
-    const internalName = input.dataset.internalname;
-    const value = input.value;
-    values[internalName] = value;
-  });
-  console.log('priting values of fields');
-  console.log(values); // { firstname: "John", lastname: "Doe" }
-  //beging the HS code
-  createContact();
 });
 
-async function createContact() {
-  const properties = {
-    firstName: 'John',
-    lastName: 'Doe',
-    email: 'john.doe@example.com',
-  };
+var myHeaders = new Headers();
+myHeaders.append('Content-Type', 'application/json');
 
+async function createContact(properties) {
   try {
     const response = await fetch(
-      'https://business-insurance-estimator-qod7dyl6g-sharvan-01.vercel.app/api/handler',
+      'https://business-insurance-estimator-sharvan-01.vercel.app/api/handler',
       {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(properties),
+        headers: myHeaders,
+        body: JSON.stringify({ properties }),
+        mode: 'cors',
       }
     );
     const data = await response.json();
-    console.log(data);
+    hubspotID = data.id;
+    console.log('the identifier is: ' + hubspotID);
+
+    //const data = await response.json();
   } catch (error) {
     console.error(error);
   }
 }
+
+// async function updateContact(properties) {
+//   try {
+//     const response = await fetch(
+//       'https://business-insurance-estimator-sharvan-01.vercel.app/api/handler',
+//       {
+//         method: 'PATCH',
+//         headers: myHeaders,
+//         body: JSON.stringify({ properties }),
+//         mode: 'cors',
+//       }
+//     );
+//     const data = await response.json();
+//     hubspotID = data.id;
+//     console.log('the identifier is: ' + hubspotID);
+
+//     //const data = await response.json();
+//   } catch (error) {
+//     console.error(error);
+//   }
+// }
 
 //when industry is selected call the products API
 $('#bi-industry').change(function () {
@@ -99,6 +107,18 @@ $('#fourth-continue-button').on('click', function () {
     }
   });
   findRecommendedProducts(products);
+
+  //getting all the input values and sending them to the HS file
+  const inputs = document.querySelectorAll('input[data-place="userInput"]');
+  inputs.forEach((input) => {
+    const internalName = input.dataset.internalname;
+    const value = input.value;
+    values[internalName] = value;
+  });
+  console.log('priting values of input fields');
+  console.log(values); // { firstname: "John", lastname: "Doe" }
+
+  // createContact(values);
 });
 
 function resetAllValues() {
@@ -138,12 +158,12 @@ $('.bi-plan').on('click', function (e) {
   }
 
   //if asset insurance
-  if (productCode === 'ai' && document.querySelector("[data-price = 'ai']") === null) {
+  if (productCode === 'ai') {
     console.log('asset insurance is working');
-    assetInsurance();
     const assetRadioButton = $(`[data-checkbox=${productCode}]`);
     checkTheCheckbox(assetRadioButton, productCode);
-    selectStatus = assetRadioButton[0].childNodes[2].checked;
+    aiSelectStatus = assetRadioButton[0].childNodes[2].checked;
+    assetInsurance(aiSelectStatus);
     return;
   }
 
@@ -229,6 +249,17 @@ function setSumInsuredFieldStatus(selectedProduct, selectStatus) {
   else $(`[data-si='${selectedProduct}']`).prop('disabled', true);
 }
 
+function assetInsuranceFieldStatus(aiSelectStatus) {
+  var elements = $("[data-si ='ai']");
+  if (!aiSelectStatus) {
+    elements[0].disabled = true;
+    elements[1].disabled = true;
+  } else {
+    elements[0].disabled = false;
+    elements[1].disabled = false;
+  }
+}
+
 //asset insurance
 //creating the pricing element
 $('#no-of-assets').change(function () {
@@ -267,17 +298,25 @@ $('#avg-cost').change(function () {
   });
 });
 
-function assetInsurance() {
-  const newElement = $('.pricing-holder')[0].cloneNode(true);
-  newElement.setAttribute('data-price', 'ai');
-  newElement.style.display = 'flex';
-  newElement.childNodes[0].innerHTML = productNamesMap.get('ai');
-  newElement.childNodes[1].innerHTML = parseInt(assetCost).toLocaleString('en-IN', {
-    maximumFractionDigits: 0,
-    style: 'currency',
-    currency: 'INR',
-  });
-  $('.final-pricing-wrapper').append(newElement);
+function assetInsurance(aiSelectStatus) {
+  assetInsuranceFieldStatus(aiSelectStatus);
+  if (aiSelectStatus) {
+    if (!document.querySelector(`[data-price='ai']`)) {
+      const newElement = $('.pricing-holder')[0].cloneNode(true);
+      newElement.setAttribute('data-price', 'ai');
+      newElement.style.display = 'flex';
+      newElement.childNodes[0].innerHTML = productNamesMap.get('ai');
+      newElement.childNodes[1].innerHTML = parseInt(assetCost).toLocaleString('en-IN', {
+        maximumFractionDigits: 0,
+        style: 'currency',
+        currency: 'INR',
+      });
+      $('.final-pricing-wrapper').append(newElement);
+    }
+  } else {
+    const dataPrice = $("[data-price='ai']");
+    dataPrice[0].style.display = 'none';
+  }
   return;
 }
 
@@ -386,12 +425,18 @@ function checkTheCheckbox(radioButton, productName) {
     radioButton[0].childNodes[0].style.display = 'none';
     radioButton[0].childNodes[2].checked = false;
     radioButton[0].childNodes[1].classList.remove('w--redirected-checked');
+    radioButton[1].childNodes[0].style.display = 'none';
+    radioButton[1].childNodes[2].checked = false;
+    radioButton[1].childNodes[1].classList.remove('w--redirected-checked');
     var tempProd = $(`[data-product='${productName}']`);
     tempProd.removeClass('selected');
   } else {
     radioButton[0].childNodes[0].style.display = 'block';
     radioButton[0].childNodes[2].checked = true;
     radioButton[0].childNodes[1].classList.add('w--redirected-checked');
+    radioButton[1].childNodes[0].style.display = 'block';
+    radioButton[1].childNodes[2].checked = true;
+    radioButton[1].childNodes[1].classList.add('w--redirected-checked');
     var tempProd = $(`[data-product='${productName}']`);
     tempProd.addClass('selected');
   }
@@ -429,6 +474,7 @@ function findRecommendedProducts(products) {
         fundingRound,
         revenueAmount
       );
+      assetInsuranceFieldStatus(aiSelectStatus);
       setSumInsuredFieldStatus(element[0], true);
       changeSumInsured(element[0], largestSI); //sending the entire product data to findTheLargestSumInsured()
       calculation(element[0], radioButton[0].childNodes[2].checked);
@@ -477,7 +523,9 @@ var industryID = 2,
   valueOfAssets = 0,
   assetCost = 0,
   nameOfPerson,
-  grandTotal = 0;
+  aiSelectStatus = false,
+  grandTotal = 0,
+  hubspotID;
 const values = {};
 const productsAPI = new URL(
   `https://x8ki-letl-twmt.n7.xano.io/api:MR0gzHqf/industry?id=${industryID}`

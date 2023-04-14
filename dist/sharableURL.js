@@ -1,8 +1,5 @@
 "use strict";
 (() => {
-  // bin/live-reload.js
-  new EventSource(`${"http://localhost:3000"}/esbuild`).addEventListener("change", () => location.reload());
-
   // node_modules/.pnpm/axios@1.3.5/node_modules/axios/lib/helpers/bind.js
   function bind(fn, thisArg) {
     return function wrap() {

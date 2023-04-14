@@ -1,13 +1,5 @@
 import axios from 'axios';
 
-export const config = {
-  api: {
-    cors: {
-      origin: 'https://webdev.plumhq.com',
-    },
-  },
-};
-
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', 'https://webdev.plumhq.com');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -19,22 +11,49 @@ export default async function handler(req, res) {
   }
 
   if (req.method === 'POST') {
-    const { firstName, lastName, email } = req.body;
     const hubspotToken = process.env.HS_TOKEN;
-    const hubspotEndpoint = `https://api.hubapi.com/contacts/v1/contact?hapikey=${hubspotToken}`;
+    const data = req.body;
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${hubspotToken}`,
+      },
+    };
 
     try {
-      const response = await axios.post(hubspotEndpoint, {
-        properties: [
-          { property: 'email', value: email },
-          { property: 'firstname', value: firstName },
-          { property: 'lastname', value: lastName },
-        ],
-      });
-      console.log(response.data);
-      res.status(200).json({ message: 'Contact created successfully.' });
+      const response = await axios.post(
+        'https://api.hubapi.com/crm/v3/objects/contacts',
+        data,
+        config
+      );
+
+      res.status(200).json(response.data);
     } catch (error) {
       console.error(error);
+      console.log(data);
+      res.status(500).json({ message: 'Failed to create contact.' });
+    }
+  } else if (req.method === 'PATCH') {
+    const hubspotToken = process.env.HS_TOKEN;
+    const data = req.body;
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${hubspotToken}`,
+      },
+    };
+
+    try {
+      const response = await axios.post(
+        'https://api.hubapi.com/crm/v3/objects/contacts',
+        data,
+        config
+      );
+
+      res.status(200).json(response.data);
+    } catch (error) {
+      console.error(error);
+      console.log(data);
       res.status(500).json({ message: 'Failed to create contact.' });
     }
   } else {
