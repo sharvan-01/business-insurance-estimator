@@ -20,7 +20,7 @@
     console.log(industryID);
     productsAPI.search = "?id=" + industryID;
     apiFetch(productsAPI);
-    companyName = $("#company-name").val();
+    companyName = $("#bi-company").val();
     $("#insert-company-name")[0].innerHTML = companyName;
     $("#insert-company-2")[0].innerHTML = companyName;
   });
@@ -223,6 +223,10 @@
   function assetInsurance(aiSelectStatus2) {
     assetInsuranceFieldStatus(aiSelectStatus2);
     if (aiSelectStatus2) {
+      if (document.querySelector(`[data-price='ai']`)) {
+        const dataPrice = $("[data-price='ai']");
+        dataPrice[0].style.display = "flex";
+      }
       if (!document.querySelector(`[data-price='ai']`)) {
         const newElement = $(".pricing-holder")[0].cloneNode(true);
         newElement.setAttribute("data-price", "ai");
