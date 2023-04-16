@@ -19,9 +19,9 @@ function startTimer() {
   let remainingTimeElement = document.querySelector('#remainingTime'),
     secondsLeft = 5;
 
-  const downloadTimer = setInterval(() => {
+  const Timer = setInterval(() => {
     if (secondsLeft <= 0) {
-      clearInterval(downloadTimer);
+      clearInterval(Timer);
       $('#resend-otp-button').prop('disabled', false);
     }
     remainingTimeElement.value = secondsLeft;
@@ -29,24 +29,6 @@ function startTimer() {
     secondsLeft -= 1;
   }, 1000);
 }
-
-// function sendData() {
-//   const axios = require('axios');
-
-//   const object = {
-//     email: 'example@asfgev.com',
-//     firstName: 'John',
-//   };
-
-//   axios
-//     .post('http://localhost:3000/contact', object)
-//     .then((response) => {
-//       console.log('Contact created successfully!');
-//     })
-//     .catch((error) => {
-//       console.error('Failed to create contact:', error);
-//     });
-// }
 
 //common headers between get and verify OTP.
 var myHeaders = new Headers();

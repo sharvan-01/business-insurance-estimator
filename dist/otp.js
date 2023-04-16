@@ -13,9 +13,9 @@
   });
   function startTimer() {
     let remainingTimeElement = document.querySelector("#remainingTime"), secondsLeft = 5;
-    const downloadTimer = setInterval(() => {
+    const Timer = setInterval(() => {
       if (secondsLeft <= 0) {
-        clearInterval(downloadTimer);
+        clearInterval(Timer);
         $("#resend-otp-button").prop("disabled", false);
       }
       remainingTimeElement.value = secondsLeft;

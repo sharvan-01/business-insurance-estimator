@@ -23,23 +23,31 @@
     companyName = $("#bi-company").val();
     $("#insert-company-name")[0].innerHTML = companyName;
     $("#insert-company-2")[0].innerHTML = companyName;
+    createDataTwo(true);
   });
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
-  async function createContact(properties) {
+  async function updateContact(properties) {
     try {
+      console.log("the update properties object");
+      console.log(properties);
       const response = await fetch(
         "https://business-insurance-estimator-sharvan-01.vercel.app/api/handler",
         {
           method: "POST",
           headers: myHeaders,
-          body: JSON.stringify({ properties }),
+          body: properties,
           mode: "cors"
         }
       );
-      const data = await response.json();
-      hubspotID = data.id;
-      console.log("the identifier is: " + hubspotID);
+      if (response.ok) {
+        const data = await response.json();
+        console.log("the data sent to update is:");
+        console.log(data);
+      } else {
+        const errorData = await response.json();
+        console.error(errorData);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -71,20 +79,40 @@
       }
     });
     findRecommendedProducts(products);
+    createDataThree();
   });
-  $("#final-submit").on("click", function() {
-    console.log("priting map");
-    console.log(chosenProductsMap);
-    const inputs = document.querySelectorAll('input[data-place="userInput"]');
-    inputs.forEach((input) => {
+  function createDataTwo() {
+    var properties = {};
+    var inputFields = document.querySelectorAll('input[data-screen="two"]');
+    var selectFields = document.querySelectorAll('select[data-screen="two"]');
+    const elements = [...inputFields, ...selectFields];
+    console.log(elements);
+    elements.forEach((input) => {
       const internalName = input.dataset.internalname;
       const value = input.value;
-      values[internalName] = value;
+      properties[internalName] = value;
     });
-    console.log("priting values of input fields");
+    properties["business_industry"] = $("#bi-industry :selected").text();
+    values["property"] = properties;
+    console.log("second continue button data");
+    console.log(values.property);
+  }
+  function createDataThree() {
+    var properties = {};
+    var inputFields = document.querySelectorAll('input[data-screen="three"]');
+    var selectFields = document.querySelectorAll('select[data-screen="three"]');
+    const elements = [...inputFields, ...selectFields];
+    console.log(elements);
+    elements.forEach((input) => {
+      const internalName = input.dataset.internalname;
+      const value = input.value;
+      properties[internalName] = value;
+    });
+    values["property"] = properties;
+    console.log("third continue button data");
     console.log(values);
-    createContact(values);
-  });
+    updateContact(values["property"], hubspotID);
+  }
   function resetAllValues() {
     products.forEach((element) => {
       setSumInsuredFieldStatus(element[0], true);
@@ -189,6 +217,7 @@
     console.log("the products current price is: " + tempProd.get("price"));
     totalPrice = parseInt(totalPrice) - parseInt(tempProd.get("price"));
     tempProd.set("price", newPrice);
+    tempProd.set("si", newSI);
     console.log(chosenProductsMap);
     calculation(selectedProduct, true);
   });
@@ -210,38 +239,41 @@
   }
   $("#no-of-assets").change(function() {
     noOfAssets = $("#no-of-assets").val();
+    $("#avg-cost").trigger("change");
   });
   $("#avg-cost").change(function() {
     valueOfAssets = $("#avg-cost").val();
-    assetCost = parseInt(noOfAssets) * parseInt(valueOfAssets) * 0.0125;
-    totalPrice = parseInt(assetCost) + parseInt(totalPrice);
-    chosenProductsMap = chosenProductsMap.set("ai", /* @__PURE__ */ new Map([["price", assetCost]]));
-    $("[data-si='ai']").val = assetCost;
-    const total = $("[data-element='total']")[0];
-    const gst = $("[data-element='gst']")[0];
-    const grandTotalElement = $("[data-element='grandTotal']")[0];
-    total.innerHTML = totalPrice.toLocaleString("en-IN", {
-      maximumFractionDigits: 0,
-      style: "currency",
-      currency: "INR"
-    });
-    grandTotalElement.innerHTML = grandTotal.toLocaleString("en-IN", {
-      maximumFractionDigits: 0,
-      style: "currency",
-      currency: "INR"
-    });
-    gst.innerHTML = gstPrice.toLocaleString("en-IN", {
-      maximumFractionDigits: 0,
-      style: "currency",
-      currency: "INR"
-    });
-    let pricingElement = $("[data-price='ai']");
-    pricingElement = pricingElement[0];
-    pricingElement.childNodes[1].innerHTML = parseInt(assetCost).toLocaleString("en-IN", {
-      maximumFractionDigits: 0,
-      style: "currency",
-      currency: "INR"
-    });
+    if (valueOfAssets) {
+      assetCost = parseInt(noOfAssets) * parseInt(valueOfAssets) * 0.0125;
+      totalPrice = parseInt(assetCost) + parseInt(totalPrice);
+      chosenProductsMap.set("ai", /* @__PURE__ */ new Map([["price", assetCost]]));
+      $("[data-si='ai']").val = assetCost;
+      const total = $("[data-element='total']")[0];
+      const gst = $("[data-element='gst']")[0];
+      const grandTotalElement = $("[data-element='grandTotal']")[0];
+      total.innerHTML = totalPrice.toLocaleString("en-IN", {
+        maximumFractionDigits: 0,
+        style: "currency",
+        currency: "INR"
+      });
+      grandTotalElement.innerHTML = grandTotal.toLocaleString("en-IN", {
+        maximumFractionDigits: 0,
+        style: "currency",
+        currency: "INR"
+      });
+      gst.innerHTML = gstPrice.toLocaleString("en-IN", {
+        maximumFractionDigits: 0,
+        style: "currency",
+        currency: "INR"
+      });
+      let pricingElement = $("[data-price='ai']");
+      pricingElement = pricingElement[0];
+      pricingElement.childNodes[1].innerHTML = parseInt(assetCost).toLocaleString("en-IN", {
+        maximumFractionDigits: 0,
+        style: "currency",
+        currency: "INR"
+      });
+    }
   });
   function assetInsurance(aiSelectStatus2) {
     assetInsuranceFieldStatus(aiSelectStatus2);
@@ -263,6 +295,7 @@
         $(".final-pricing-wrapper").append(newElement);
       }
     } else {
+      chosenProductsMap.delete("ai");
       const dataPrice = $("[data-price='ai']");
       dataPrice[0].style.display = "none";
     }
@@ -273,7 +306,8 @@
       if (document.querySelector("[data-price='cd']")) {
         document.querySelector("[data-price='cd']").style.display = "flex";
       }
-      if (!document.querySelector("[data-price='ci']")) {
+      chosenProductsMap.set("cd", "contact sales");
+      if (!document.querySelector("[data-price='cd']")) {
         const newElement = $(".pricing-holder")[0].cloneNode(true);
         newElement.setAttribute("data-price", "cd");
         newElement.style.display = "flex";
@@ -282,6 +316,7 @@
         $(".final-pricing-wrapper").append(newElement);
       }
     } else {
+      chosenProductsMap.delete("cd");
       document.querySelector("[data-price='cd']").style.display = "none";
     }
   }
@@ -364,9 +399,11 @@
       radioButton[0].childNodes[0].style.display = "none";
       radioButton[0].childNodes[2].checked = false;
       radioButton[0].childNodes[1].classList.remove("w--redirected-checked");
-      radioButton[1].childNodes[0].style.display = "none";
-      radioButton[1].childNodes[2].checked = false;
-      radioButton[1].childNodes[1].classList.remove("w--redirected-checked");
+      if (radioButton[1]) {
+        radioButton[1].childNodes[0].style.display = "none";
+        radioButton[1].childNodes[2].checked = false;
+        radioButton[1].childNodes[1].classList.remove("w--redirected-checked");
+      }
       var tempProd = $(`[data-product='${productName}']`);
       tempProd.removeClass("selected");
     } else {
@@ -451,7 +488,7 @@
   var nameOfPerson;
   var aiSelectStatus = false;
   var grandTotal = 0;
-  var hubspotID;
+  var hubspotID = "42118001";
   var values = {};
   var productsAPI = new URL(
     `https://x8ki-letl-twmt.n7.xano.io/api:MR0gzHqf/industry?id=${industryID}`

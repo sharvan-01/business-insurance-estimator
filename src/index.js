@@ -28,6 +28,7 @@ $('#second-continue').on('click', function () {
   companyName = $('#bi-company').val();
   $('#insert-company-name')[0].innerHTML = companyName;
   $('#insert-company-2')[0].innerHTML = companyName;
+  createDataTwo(true);
 });
 
 var myHeaders = new Headers();
@@ -49,6 +50,34 @@ async function createContact(properties) {
     console.log('the identifier is: ' + hubspotID);
 
     //const data = await response.json();
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function updateContact(properties) {
+  try {
+    console.log('the update properties object');
+    console.log(properties);
+    const response = await fetch(
+      'https://business-insurance-estimator-sharvan-01.vercel.app/api/handler',
+      {
+        method: 'POST',
+        headers: myHeaders,
+        body: properties,
+        mode: 'cors',
+      }
+    );
+    if (response.ok) {
+      const data = await response.json();
+      console.log('the data sent to update is:');
+      console.log(data);
+      // Handle success
+    } else {
+      const errorData = await response.json();
+      console.error(errorData);
+      // Handle error
+    }
   } catch (error) {
     console.error(error);
   }
@@ -107,6 +136,7 @@ $('#fourth-continue-button').on('click', function () {
     }
   });
   findRecommendedProducts(products);
+  createDataThree();
 
   //getting all the input values and sending them to the HS file
   // { firstname: "John", lastname: "Doe" }
@@ -114,19 +144,45 @@ $('#fourth-continue-button').on('click', function () {
   // createContact(values);
 });
 
-$('#final-submit').on('click', function () {
-  console.log('priting map');
-  console.log(chosenProductsMap);
-  const inputs = document.querySelectorAll('input[data-place="userInput"]');
-  inputs.forEach((input) => {
+function createDataTwo() {
+  var properties = {};
+  var inputFields = document.querySelectorAll('input[data-screen="two"]');
+  var selectFields = document.querySelectorAll('select[data-screen="two"]');
+  const elements = [...inputFields, ...selectFields];
+  console.log(elements);
+  elements.forEach((input) => {
     const internalName = input.dataset.internalname;
     const value = input.value;
-    values[internalName] = value;
+    properties[internalName] = value;
   });
-  console.log('priting values of input fields');
+  properties['business_industry'] = $('#bi-industry :selected').text();
+  values['property'] = properties;
+  console.log('second continue button data');
+  console.log(values.property);
+  //createContact(values.property);
+}
+
+function createDataThree() {
+  var properties = {};
+  var inputFields = document.querySelectorAll('input[data-screen="three"]');
+  var selectFields = document.querySelectorAll('select[data-screen="three"]');
+  const elements = [...inputFields, ...selectFields];
+  console.log(elements);
+  elements.forEach((input) => {
+    const internalName = input.dataset.internalname;
+    const value = input.value;
+    properties[internalName] = value;
+  });
+  // values['id'] = hubspotID;
+  values['property'] = properties;
+  console.log('third continue button data');
   console.log(values);
-  createContact(values);
-});
+  updateContact(values['property'], hubspotID);
+}
+
+function finalDataSubmit() {
+  values['bi_products_chosen'] = Object.keys(Object.fromEntries(chosenProductsMap)).join(';');
+}
 
 function resetAllValues() {
   products.forEach((element) => {
@@ -246,6 +302,7 @@ $("[data-input='si']").change(function () {
   //subtracting the previous amount from the totalPrice
   totalPrice = parseInt(totalPrice) - parseInt(tempProd.get('price'));
   tempProd.set('price', newPrice);
+  tempProd.set('si', newSI);
   console.log(chosenProductsMap);
   calculation(selectedProduct, true);
 });
@@ -271,38 +328,41 @@ function assetInsuranceFieldStatus(aiSelectStatus) {
 //creating the pricing element
 $('#no-of-assets').change(function () {
   noOfAssets = $('#no-of-assets').val();
+  $('#avg-cost').trigger('change');
 });
 $('#avg-cost').change(function () {
   valueOfAssets = $('#avg-cost').val();
-  assetCost = parseInt(noOfAssets) * parseInt(valueOfAssets) * 0.0125;
-  totalPrice = parseInt(assetCost) + parseInt(totalPrice);
-  chosenProductsMap = chosenProductsMap.set('ai', new Map([['price', assetCost]]));
-  $("[data-si='ai']").val = assetCost;
-  const total = $("[data-element='total']")[0];
-  const gst = $("[data-element='gst']")[0];
-  const grandTotalElement = $("[data-element='grandTotal']")[0];
-  total.innerHTML = totalPrice.toLocaleString('en-IN', {
-    maximumFractionDigits: 0,
-    style: 'currency',
-    currency: 'INR',
-  });
-  grandTotalElement.innerHTML = grandTotal.toLocaleString('en-IN', {
-    maximumFractionDigits: 0,
-    style: 'currency',
-    currency: 'INR',
-  });
-  gst.innerHTML = gstPrice.toLocaleString('en-IN', {
-    maximumFractionDigits: 0,
-    style: 'currency',
-    currency: 'INR',
-  });
-  let pricingElement = $("[data-price='ai']");
-  pricingElement = pricingElement[0];
-  pricingElement.childNodes[1].innerHTML = parseInt(assetCost).toLocaleString('en-IN', {
-    maximumFractionDigits: 0,
-    style: 'currency',
-    currency: 'INR',
-  });
+  if (valueOfAssets) {
+    assetCost = parseInt(noOfAssets) * parseInt(valueOfAssets) * 0.0125;
+    totalPrice = parseInt(assetCost) + parseInt(totalPrice);
+    chosenProductsMap.set('ai', new Map([['price', assetCost]]));
+    $("[data-si='ai']").val = assetCost;
+    const total = $("[data-element='total']")[0];
+    const gst = $("[data-element='gst']")[0];
+    const grandTotalElement = $("[data-element='grandTotal']")[0];
+    total.innerHTML = totalPrice.toLocaleString('en-IN', {
+      maximumFractionDigits: 0,
+      style: 'currency',
+      currency: 'INR',
+    });
+    grandTotalElement.innerHTML = grandTotal.toLocaleString('en-IN', {
+      maximumFractionDigits: 0,
+      style: 'currency',
+      currency: 'INR',
+    });
+    gst.innerHTML = gstPrice.toLocaleString('en-IN', {
+      maximumFractionDigits: 0,
+      style: 'currency',
+      currency: 'INR',
+    });
+    let pricingElement = $("[data-price='ai']");
+    pricingElement = pricingElement[0];
+    pricingElement.childNodes[1].innerHTML = parseInt(assetCost).toLocaleString('en-IN', {
+      maximumFractionDigits: 0,
+      style: 'currency',
+      currency: 'INR',
+    });
+  }
 });
 
 function assetInsurance(aiSelectStatus) {
@@ -325,6 +385,7 @@ function assetInsurance(aiSelectStatus) {
       $('.final-pricing-wrapper').append(newElement);
     }
   } else {
+    chosenProductsMap.delete('ai');
     const dataPrice = $("[data-price='ai']");
     dataPrice[0].style.display = 'none';
   }
@@ -337,7 +398,9 @@ function crimeInsurance(selectStatus) {
       document.querySelector("[data-price='cd']").style.display = 'flex';
     }
 
-    if (!document.querySelector("[data-price='ci']")) {
+    chosenProductsMap.set('cd', 'contact sales');
+
+    if (!document.querySelector("[data-price='cd']")) {
       const newElement = $('.pricing-holder')[0].cloneNode(true);
       newElement.setAttribute('data-price', 'cd');
       newElement.style.display = 'flex';
@@ -346,6 +409,7 @@ function crimeInsurance(selectStatus) {
       $('.final-pricing-wrapper').append(newElement);
     }
   } else {
+    chosenProductsMap.delete('cd');
     document.querySelector("[data-price='cd']").style.display = 'none';
   }
 }
@@ -436,9 +500,11 @@ function checkTheCheckbox(radioButton, productName) {
     radioButton[0].childNodes[0].style.display = 'none';
     radioButton[0].childNodes[2].checked = false;
     radioButton[0].childNodes[1].classList.remove('w--redirected-checked');
-    radioButton[1].childNodes[0].style.display = 'none';
-    radioButton[1].childNodes[2].checked = false;
-    radioButton[1].childNodes[1].classList.remove('w--redirected-checked');
+    if (radioButton[1]) {
+      radioButton[1].childNodes[0].style.display = 'none';
+      radioButton[1].childNodes[2].checked = false;
+      radioButton[1].childNodes[1].classList.remove('w--redirected-checked');
+    }
     var tempProd = $(`[data-product='${productName}']`);
     tempProd.removeClass('selected');
   } else {
@@ -538,8 +604,8 @@ var industryID = 2,
   nameOfPerson,
   aiSelectStatus = false,
   grandTotal = 0,
-  hubspotID;
-const values = {};
+  hubspotID = '42118001';
+var values = {};
 const productsAPI = new URL(
   `https://x8ki-letl-twmt.n7.xano.io/api:MR0gzHqf/industry?id=${industryID}`
 );

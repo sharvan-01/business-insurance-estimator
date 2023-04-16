@@ -1,0 +1,49 @@
+Things to work on:
+- Crime insurance is not removing the selected class on deselecting ✅
+- Send all data to HS
+    - send data on second button click
+    - update data on third button click
+    - update data on fourth button click
+- Sharable URL
+- Fix mobile version
+- Total is not showing ✅
+- Crime and dishonesty is showing multiple times ✅
+- Exit intent pop-up
+
+
+
+properties
+bi_products
+    directors_and_officers_price
+    directors_and_officers_sum_insured
+    commercial_general_liability_price
+    errors_and_omissions_price
+    errors_and_omissions_sum_insured
+    cyber_insurance_price
+    cyber_insurance_sum_insured
+    asset_insurance_price
+
+
+Send data to hubspot
+
+createContact()
+updateContact()
+    - will get input fields and send it to HS
+updateProductList()
+    - final submit to HS
+    - will get the chosen product list along with price and SI
+    - update the contact with these 
+
+
+createData()
+ - creates the "values" object
+    if(secondStage)
+        - call the createContact()
+    else
+        - call the updateContact()
+- 
+
+
+
+asfaw@a.com
+id: 42118001
