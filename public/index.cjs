@@ -3,6 +3,9 @@
 
 import axios from 'axios';
 
+import estimateExists from './sharableURL.cjs';
+// import returningUser from './sharableURL.cjs';
+
 function listIndustries(data) {
   const industryOption = Object.entries(data);
   industryOption.forEach((element) => {
@@ -15,7 +18,7 @@ function listIndustries(data) {
 }
 
 $('#first-continue-button').on('click', function () {
-  nameOfPerson = $('#name').val();
+  nameOfPerson = $('#bi-name').val();
   $('#insert-name')[0].innerHTML = nameOfPerson;
 });
 
@@ -36,15 +39,12 @@ myHeaders.append('Content-Type', 'application/json');
 
 async function createContact(properties) {
   try {
-    const response = await fetch(
-      'https://business-insurance-estimator-sharvan-01.vercel.app/api/handler',
-      {
-        method: 'POST',
-        headers: myHeaders,
-        body: JSON.stringify({ properties }),
-        mode: 'cors',
-      }
-    );
+    const response = await fetch('/api/handler', {
+      method: 'POST',
+      headers: myHeaders,
+      body: JSON.stringify({ properties }),
+      mode: 'cors',
+    });
     const data = await response.json();
     hubspotID = data.id;
     console.log('the identifier is: ' + hubspotID);
@@ -59,15 +59,12 @@ async function updateContact(properties) {
   try {
     console.log('the update properties object');
     console.log(properties);
-    const response = await fetch(
-      'https://business-insurance-estimator-sharvan-01.vercel.app/api/handler',
-      {
-        method: 'POST',
-        headers: myHeaders,
-        body: properties,
-        mode: 'cors',
-      }
-    );
+    const response = await fetch('/api/handler', {
+      method: 'PATCH',
+      headers: myHeaders,
+      body: JSON.stringify(properties),
+      mode: 'cors',
+    });
     if (response.ok) {
       const data = await response.json();
       console.log('the data sent to update is:');
@@ -75,11 +72,11 @@ async function updateContact(properties) {
       // Handle success
     } else {
       const errorData = await response.json();
-      console.error(errorData);
+      console.log(errorData);
       // Handle error
     }
   } catch (error) {
-    console.error(error);
+    console.log(error);
   }
 }
 
@@ -123,9 +120,12 @@ $('#last-financial-year-revenue').change(function () {
   revenueAmount = $('#last-financial-year-revenue').val();
 });
 
-$('#fourth-continue-button').on('click', function () {
+$('#fourth-continue-button').on('click', async function () {
   console.log('industry ID');
   console.log(industryID);
+  console.log('Does the estimate exist?');
+  console.log(estimateExists);
+  // if (!estimateExists)
   resetAllValues();
   products.forEach((element) => {
     // finding all elements that have a recommendation of no and disabling them
@@ -136,7 +136,7 @@ $('#fourth-continue-button').on('click', function () {
     }
   });
   findRecommendedProducts(products);
-  createDataThree();
+  await createDataThree();
 
   //getting all the input values and sending them to the HS file
   // { firstname: "John", lastname: "Doe" }
@@ -156,13 +156,13 @@ function createDataTwo() {
     properties[internalName] = value;
   });
   properties['business_industry'] = $('#bi-industry :selected').text();
-  values['property'] = properties;
+  values['properties'] = properties;
   console.log('second continue button data');
   console.log(values.property);
-  //createContact(values.property);
+  createContact(values.property);
 }
 
-function createDataThree() {
+async function createDataThree() {
   var properties = {};
   var inputFields = document.querySelectorAll('input[data-screen="three"]');
   var selectFields = document.querySelectorAll('select[data-screen="three"]');
@@ -173,11 +173,16 @@ function createDataThree() {
     const value = input.value;
     properties[internalName] = value;
   });
-  // values['id'] = hubspotID;
-  values['property'] = properties;
+  values['id'] = hubspotID;
+  values['properties'] = properties;
   console.log('third continue button data');
   console.log(values);
-  updateContact(values['property'], hubspotID);
+  try {
+    var result = await updateContact(values);
+    console.log(result);
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 function finalDataSubmit() {
@@ -340,12 +345,18 @@ $('#avg-cost').change(function () {
     const total = $("[data-element='total']")[0];
     const gst = $("[data-element='gst']")[0];
     const grandTotalElement = $("[data-element='grandTotal']")[0];
+    const mGT = $('#grandTotal-mobile')[0];
     total.innerHTML = totalPrice.toLocaleString('en-IN', {
       maximumFractionDigits: 0,
       style: 'currency',
       currency: 'INR',
     });
     grandTotalElement.innerHTML = grandTotal.toLocaleString('en-IN', {
+      maximumFractionDigits: 0,
+      style: 'currency',
+      currency: 'INR',
+    });
+    mGT.innerHTML = grandTotal.toLocaleString('en-IN', {
       maximumFractionDigits: 0,
       style: 'currency',
       currency: 'INR',
@@ -418,6 +429,7 @@ function calculation(productCode, selectStatus) {
   const total = $("[data-element='total']")[0];
   const gst = $("[data-element='gst']")[0];
   const grandTotalElement = $("[data-element='grandTotal']")[0];
+  const mGT = $('#grandTotal-mobile')[0];
   const prodDeets = chosenProductsMap.get(productCode);
   const price = prodDeets.get('price');
 
@@ -451,6 +463,11 @@ function calculation(productCode, selectStatus) {
       style: 'currency',
       currency: 'INR',
     });
+    mGT.innerHTML = grandTotal.toLocaleString('en-IN', {
+      maximumFractionDigits: 0,
+      style: 'currency',
+      currency: 'INR',
+    });
     gst.innerHTML = gstPrice.toLocaleString('en-IN', {
       maximumFractionDigits: 0,
       style: 'currency',
@@ -477,6 +494,11 @@ function calculation(productCode, selectStatus) {
       currency: 'INR',
     });
     grandTotalElement.innerHTML = grandTotal.toLocaleString('en-IN', {
+      maximumFractionDigits: 0,
+      style: 'currency',
+      currency: 'INR',
+    });
+    mGT.innerHTML = grandTotal.toLocaleString('en-IN', {
       maximumFractionDigits: 0,
       style: 'currency',
       currency: 'INR',
@@ -531,7 +553,7 @@ async function apiFetch(api) {
 }
 // export { apiFetch };
 
-function saveProductData(data) {
+async function saveProductData(data) {
   products = Object.entries(data);
 }
 
@@ -604,7 +626,7 @@ var industryID = 2,
   nameOfPerson,
   aiSelectStatus = false,
   grandTotal = 0,
-  hubspotID = '42118001';
+  hubspotID = '42120551';
 var values = {};
 const productsAPI = new URL(
   `https://x8ki-letl-twmt.n7.xano.io/api:MR0gzHqf/industry?id=${industryID}`
@@ -626,17 +648,15 @@ var recommendedPlans = [];
 
 //calling the API to fetch industry details
 
-document.addEventListener(
-  'DOMContentLoaded',
-  function () {
-    fetch(industryAPI)
-      .then((response) => response.json())
-      .then((data) => {
-        listIndustries(data);
-      });
-  },
-  false
-);
+document.addEventListener('DOMContentLoaded', getAllIndustries());
+
+export default async function getAllIndustries() {
+  await fetch(industryAPI)
+    .then((response) => response.json())
+    .then((data) => {
+      listIndustries(data);
+    });
+}
 
 //disable first option for all select field questions
 function disableFirstOption() {

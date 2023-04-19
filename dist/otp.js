@@ -2,21 +2,33 @@
 (() => {
   // src/otp.js
   var phone;
+  var OTPverified = false;
   console.log("OTP file loaded");
   $("#second-continue").on("click", function() {
-    $("#resend-otp-button").prop("disabled", true);
-    phone = $("#phone").val();
+    buttonStatus();
+    $("#resend-otp-button").css("pointer-events", "none");
+    phone = $("#bi-phone").val();
     phone = parseInt(phone);
     phone = "+91" + phone;
-    getOTP(phone);
     startTimer();
   });
+  function buttonStatus() {
+    if (!OTPverified) {
+      $("#otp-continue-button").css("pointer-events", "none");
+      $("#otp-continue-button").addClass("disabled");
+    } else {
+      $("#otp-continue-button").css("pointer-events", "auto");
+      $("#otp-continue-button").removeClass("disabled");
+    }
+  }
   function startTimer() {
     let remainingTimeElement = document.querySelector("#remainingTime"), secondsLeft = 5;
     const Timer = setInterval(() => {
       if (secondsLeft <= 0) {
         clearInterval(Timer);
-        $("#resend-otp-button").prop("disabled", false);
+        $("#resend-otp-button").css("pointer-events", "auto");
+        $("#resend-otp-button").css("color", "rgba(87, 14, 64, 1)");
+        $("#resend-otp-button").css("border-bottom", "2px solid rgba(87, 14, 64, 1)");
       }
       remainingTimeElement.value = secondsLeft;
       remainingTimeElement.textContent = "(" + secondsLeft + ")";
@@ -50,6 +62,7 @@
     console.log(id);
   }
   $("#verify-otp").on("click", function() {
+    $("#otp-continue-button").click();
     verifyOTP();
   });
   async function verifyOTP() {
@@ -68,29 +81,30 @@
     fetch(
       "https://api-prod.plumhq.com/api/v2/authentication/phoneVerfication/otp/verify",
       requestOptions
-    ).then((response) => response.json()).then((result) => verify(result)).catch((error) => errorMessage2());
+    ).then((response) => response.json()).then((result) => verify(result)).catch((error) => errorMessage());
     function verify(result) {
       var verify2 = Object.entries(result);
       verify2 = verify2[0];
-      if (verify2[1]) {
-        console.log("this is pressed");
+      if (verify2[0] === "success") {
+        OTPverified = true;
+        buttonStatus();
         $("#otp-continue-button").click();
       } else
         incorrectOTP();
     }
-    function incorrectOTP() {
-      errorMessage2.innerHTML = "Incorrect OTP";
-      errorMessage2.style.display("block");
-      setTimeout(() => {
-        errorMessage2.style.display("hide");
-      }, "3000");
-    }
-    function errorMessage2() {
-      errorMessage2.innerHTML = "An error occured.";
-    }
+  }
+  function incorrectOTP() {
+    errorMessage.innerHTML = "Incorrect OTP";
+    errorMessage.css("display", "block");
+    setTimeout(() => {
+      errorMessage.css("display", "hide");
+    }, "3000");
+  }
+  function errorMessage() {
+    errorMessage.innerHTML = "An error occured.";
   }
   $("#resend-otp-button").on("click", function() {
-    getOTP();
+    getOTP(phone);
   });
   var id;
   var errorMessage = $("#incorrect-otp");

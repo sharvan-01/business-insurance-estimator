@@ -1,14 +1,14 @@
 Things to work on:
 - Crime insurance is not removing the selected class on deselecting ✅
-- Send all data to HS
-    - send data on second button click
-    - update data on third button click
-    - update data on fourth button click
-- Sharable URL
-- Fix mobile version
+- Send all data to HS ✅
+    - send data on second button click ✅
+    - update data on third button click  ✅
+    - update data on fourth button click ✅
+- Sharable URL ❌
+- Fix mobile version ✅
 - Total is not showing ✅
 - Crime and dishonesty is showing multiple times ✅
-- Exit intent pop-up
+- Exit intent pop-up ✅
 
 
 
@@ -43,7 +43,32 @@ createData()
         - call the updateContact()
 - 
 
+OTP changes:
+1. Uncomment line 16
+2. Remove line 85
 
 
-asfaw@a.com
-id: 42118001
+
+
+What should the sharableURL file do?
+
+1. Strip the URL for an id attribute
+    - - export the estimateExists varaible to index.js
+2. If ID exists
+    - go do a GET statement from the database and get the record
+    - also GET the identifier to update the URL field once again (or) save the URL along with the other data 
+    - also GET hs_id so that we can update values incase they change
+    - do not create a HS record
+    - do not create a new dB record
+    - 
+3. With the retrieved values then fill in the input fields
+4. Click the continue buttons at each stage
+    - this will trigger the respective functions for each stage in the index.js file
+    - do not create a new HS record
+5. 
+
+Click the fourth submit button after that. 
+
+3905ddfc-b656-4534-90c5-952f76750e4f
+
+https://webdev.plumhq.com/business-insurance-estimator?id=032b86ec-e0cf-4423-b57d-50a05147c19a

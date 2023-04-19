@@ -115,7 +115,7 @@
     }
   };
   var modal = $("#bi-modal");
-  var callback = $("#bi-modal-2");
+  var exitIntent = $("#exitIntent");
   var close = $("#bi-modal-close");
   $("[data-element='learn']").on("click", function() {
     var productCode = $(this).attr("data-product");
@@ -138,11 +138,18 @@
     $("[data-modal='whatsNot'] [data-modal-list='four']")[0].innerHTML = product.whatsNot[0].four;
   });
   $("#final-submit").on("click", function() {
-    callback.css("display", "flex");
+    exitIntent.css("display", "flex");
+    $(".business-body").css("overflow", "hidden");
   });
   $("[data-element='close']").on("click", function() {
     modal.css("display", "none");
-    callback.css("display", "none");
+    exitIntent.css("display", "none");
+    $(".business-body").css("overflow", "visible");
+  });
+  $("[data-element = 'requestCallback']").on("click", function() {
+    console.log("gee");
+    exitIntent.css("display", "flex");
+    $(".business-body").css("overflow", "hidden");
   });
 })();
 //# sourceMappingURL=wcwnc.js.map

@@ -8,12 +8,13 @@ const PRODUCTION = process.env.NODE_ENV === 'production';
 
 // Config entrypoint files
 const ENTRY_POINTS = [
-  'src/index.js',
+  'src/index.cjs',
   'src/otp.js',
   'src/wcwnc.js',
   'src/hs.js',
-  'src/sharableURL.js',
+  'src/sharableURL.cjs',
   'src/mobileVersion.js',
+  'src/exitIntent.js',
 ];
 
 // Config dev serving
