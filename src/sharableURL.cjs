@@ -44,7 +44,7 @@ async function retriveValuesFromDB(id) {
 
 //filling in the form values from the estimate retrived from the dB
 async function fillInValues(estimate) {
-  await getAllIndustries();
+  // await getAllIndustries();
   console.log(estimate);
   var form = $('#wf-form-Business-insurance-form')[0];
   form[0].value = estimate.Name;

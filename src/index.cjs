@@ -765,7 +765,7 @@ var recommendedPlans = [];
 
 //calling the API to fetch industry details
 
-//document.addEventListener('DOMContentLoaded', getAllIndustries());
+document.addEventListener('DOMContentLoaded', getAllIndustries());
 
 export default async function getAllIndustries() {
   await fetch(industryAPI)

@@ -2542,7 +2542,6 @@
         });
       }
       async function fillInValues(estimate2) {
-        await getAllIndustries();
         console.log(estimate2);
         var form = $("#wf-form-Business-insurance-form")[0];
         form[0].value = estimate2.Name;
@@ -3194,6 +3193,7 @@
       ]);
       industryAPI = "https://x8ki-letl-twmt.n7.xano.io/api:MR0gzHqf/get-all-industries";
       recommendedPlans = [];
+      document.addEventListener("DOMContentLoaded", getAllIndustries());
     }
   });
   init_src();
