@@ -443,6 +443,15 @@ $('#avg-cost').change(function () {
       style: 'currency',
       currency: 'INR',
     });
+    let pricingElementMobile = $("[data-price='ai']");
+    pricingElementMobile = pricingElement[1];
+    pricingElementMobile.childNodes[1].innerHTML = parseInt(assetCost).toLocaleString('en-IN', {
+      maximumFractionDigits: 0,
+      style: 'currency',
+      currency: 'INR',
+    });
+    console.log(pricingElementMobile.childNodes[1]);
+    console.log(pricingElementMobile.childNodes[1].innerHTML);
   }
 });
 

@@ -48,10 +48,10 @@
       ]
     },
     ci: {
-      heading: "Cybersecurity insurance",
-      headingDesc: "A Cyber Liability policy helps protect an organisation from risks arising from information technology & infrastructure. It shields the team from financial repercussions and impact of cyber-attacks/ breaches / Ransomwares.",
-      question: "Who do we recommend the cybersecurity cover for?",
-      answer: "We recommend cybersecurity insurance for any business that stores and handles sensitive data. It is particularly relevant for industries like technology , software development, healthcare and retail.",
+      heading: "Cyber liability insurance",
+      headingDesc: "A cyber liability policy helps protect an organisation from risks arising from information technology & infrastructure. It shields the team from financial repercussions and impact of cyber-attacks/ breaches / Ransomwares.",
+      question: "Who do we recommend the cyber liability insurance cover for?",
+      answer: "We recommend cyber liability insurance for any business that stores and handles sensitive data. It is particularly relevant for industries like technology , software development, healthcare and retail.",
       whatsCovered: [
         {
           one: "Loss arising out of breach of privacy or security",
