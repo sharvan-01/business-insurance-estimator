@@ -65,10 +65,30 @@ What should the sharableURL file do?
 4. Click the continue buttons at each stage
     - this will trigger the respective functions for each stage in the index.js file
     - do not create a new HS record
-5. 
+5. Click the fourth submit button after that. 
 
-Click the fourth submit button after that. 
+The (fouth-continue-button).onClick function on the sharableURL.js file getting triggered
+before the index.js files function is getting triggered. 
 
-3905ddfc-b656-4534-90c5-952f76750e4f
 
-https://webdev.plumhq.com/business-insurance-estimator?id=032b86ec-e0cf-4423-b57d-50a05147c19a
+
+
+How to show options based on the available SI's for a praticular product?
+- For each industry, each product has it's own SI 
+- We will need to read the Json for each product, get the SI, 
+
+- Get the SELECT field, store in an ID. 
+- ID.options gives you an object with each option
+    - forEach of ID.options 
+        - if (fundingJSON.find(sumInsured)=> sumInsured === element.value)
+         - do nothing
+        - else
+         - ID.remove(element.index)
+    
+
+
+
+
+
+
+https://webdev.plumhq.com/business-insurance-estimator?id=032b86ec-e0cf-4423-b57d-50a05147c19az

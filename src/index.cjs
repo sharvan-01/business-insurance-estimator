@@ -18,6 +18,10 @@ function listIndustries(data) {
   disableFirstOption();
 }
 
+// function modifySelectOptions(products) {
+//   products.fundingJSON.find(({ sumInsured }) => sumInsured === fundingRound);
+// }
+
 $('#first-continue-button').on('click', function () {
   nameOfPerson = $('#bi-name').val();
   $('#insert-name')[0].innerHTML = nameOfPerson;
@@ -33,6 +37,7 @@ $('#second-continue').on('click', async function () {
   $('#insert-company-name')[0].innerHTML = companyName;
   $('#insert-company-2')[0].innerHTML = companyName;
   if (!estimateExists) createDataTwo(true);
+  //modifySelectOptions(products);
 });
 
 var myHeaders = new Headers();
@@ -94,6 +99,7 @@ $('#bi-industry').change(function () {
   console.log(industryID);
   productsAPI.search = '?id=' + industryID;
   apiFetch(productsAPI);
+  //call the SELECT field updation function send the products variable and iterate through the SIs
 });
 
 $('#funding-round').change(function () {
@@ -233,7 +239,7 @@ function finalDataSubmit() {
 
 function resetAllValues() {
   products.forEach((element) => {
-    setSumInsuredFieldStatus(element[0], true);
+    setSumInsuredFieldStatus(element[0], false);
     const radioButton = $(`[data-checkbox=${element[0]}]`);
     if (radioButton[0].childNodes[2].checked) checkTheCheckbox(radioButton, element[0]);
   });
