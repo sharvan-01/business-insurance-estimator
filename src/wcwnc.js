@@ -42,11 +42,10 @@ var data = {
     ],
     whatsNot: [
       {
-        one: 'Bodily injury/Property damage/Personal and advertising injury due to criminal acts',
-        two: 'Bodily injury/Property damage/Personal and advertising injury due to breach of contract',
-        three:
-          'Bodily injury/Property damage/Personal and advertising injury due to Contractual/ professional Liability',
-        four: 'Bodily injury/Property damage/Personal and advertising injury due to the use of electronic data',
+        one: 'Criminal acts',
+        two: 'Breach of contract',
+        three: 'Contractual/ professional Liability',
+        four: 'Events related to the use of electronic data',
       },
     ],
   },
@@ -121,6 +120,30 @@ var data = {
         two: 'Consequential loss',
         three: 'Kidnap and Ransom',
         four: 'War',
+      },
+    ],
+  },
+  ai: {
+    heading: 'Asset insurance',
+    headingDesc:
+      'An asset protection cover safeguards businesses from losses revolving around damage to physical assets.',
+    question: 'Who do we recommend the employee dishonesty cover for?',
+    answer:
+      'We recommend an asset protection cover for organizations investing in office equipment for their employees/businesses.',
+    whatsCovered: [
+      {
+        one: 'Sudden and unforeseen physical damage, including breakdowns',
+        two: 'Loss due to faulty operations, theft and natural calamities',
+        three: 'Add on: Cost of reconstruction of data caused by a peril',
+        four: 'Add on: Additional expenditure incurred due to the use of a substitute computer system',
+      },
+    ],
+    whatsNot: [
+      {
+        one: 'Regular wear and tear from use and continuous operation',
+        two: 'Wilful act and gross negligence',
+        three: 'Consequential losses',
+        four: 'Third-party fault',
       },
     ],
   },

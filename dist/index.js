@@ -2235,6 +2235,19 @@
     });
     disableFirstOption();
   }
+  function modifySelectOptions(products2) {
+    products2.forEach((element) => {
+      var selectSIField = document.querySelector(`[data-si='${element[0]}']`);
+      var tempProducts = element[1].fundingJSON;
+      tempProducts.forEach((ele) => {
+        var optionExists = $(`[data-si='${element[0]}'] option[value=${ele.sumInsured}]`).length > 0;
+        if (!optionExists) {
+          let newOption = new Option(`\u20B9${ele.sumInsured}cr`, `${ele.sumInsured}`);
+          selectSIField.add(newOption);
+        }
+      });
+    });
+  }
   $("#first-continue-button").on("click", function() {
     nameOfPerson = $("#bi-name").val();
     $("#insert-name")[0].innerHTML = nameOfPerson;
@@ -2250,6 +2263,7 @@
     $("#insert-company-2")[0].innerHTML = companyName;
     if (!import_sharableURL.default)
       createDataTwo(true);
+    modifySelectOptions(products);
   });
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
@@ -2361,7 +2375,7 @@
   });
   function resetAllValues() {
     products.forEach((element) => {
-      setSumInsuredFieldStatus(element[0], true);
+      setSumInsuredFieldStatus(element[0], false);
       const radioButton = $(`[data-checkbox=${element[0]}]`);
       if (radioButton[0].childNodes[2].checked)
         checkTheCheckbox(radioButton, element[0]);
@@ -2492,6 +2506,8 @@
     if (valueOfAssets) {
       assetCost = parseInt(noOfAssets) * parseInt(valueOfAssets) * 0.0125;
       totalPrice = parseInt(assetCost) + parseInt(totalPrice);
+      grandTotal = parseInt(totalPrice) * 0.18 + parseInt(totalPrice);
+      gstPrice = parseInt(totalPrice) * 0.18;
       chosenProductsMap.set("ai", /* @__PURE__ */ new Map([["price", assetCost]]));
       $("[data-si='ai']").val = assetCost;
       const total = $("[data-element='total']")[0];
@@ -2554,7 +2570,7 @@
         currency: "INR"
       });
       let pricingElementMobile = $("[data-price='ai']");
-      pricingElementMobile = pricingElement[1];
+      pricingElementMobile = pricingElementMobile[1];
       pricingElementMobile.childNodes[1].innerHTML = parseInt(assetCost).toLocaleString("en-IN", {
         maximumFractionDigits: 0,
         style: "currency",
@@ -2567,9 +2583,11 @@
   function assetInsurance(aiSelectStatus2) {
     assetInsuranceFieldStatus(aiSelectStatus2);
     if (aiSelectStatus2) {
+      chosenProductsMap.set("ai", /* @__PURE__ */ new Map([["price", assetCost]]));
       if (document.querySelector(`[data-price='ai']`)) {
         const dataPrice = $("[data-price='ai']");
         dataPrice[0].style.display = "flex";
+        dataPrice[1].style.display = "flex";
       }
       if (!document.querySelector(`[data-price='ai']`)) {
         const newElement = $(".pricing-holder")[0].cloneNode(true);
@@ -2584,9 +2602,13 @@
         $(".final-pricing-wrapper").append(newElement);
       }
     } else {
-      chosenProductsMap.delete("ai");
       const dataPrice = $("[data-price='ai']");
-      dataPrice[0].style.display = "none";
+      const priceElement = dataPrice[0].childNodes[1];
+      priceElement.innerHTML = "0";
+      calculation("ai", false);
+      $("#avg-cost")[0].value = "";
+      $("#no-of-assets")[0].value = "";
+      assetCost = 0;
     }
     return;
   }
@@ -2621,7 +2643,9 @@
     const price = prodDeets.get("price");
     if (selectStatus2) {
       if (document.querySelector(`[data-price='${productCode}']`)) {
-        document.querySelector(`[data-price='${productCode}']`).style.display = "flex";
+        const dataPrice = $(`[data-price='${productCode}']`);
+        dataPrice[0].style.display = "flex";
+        dataPrice[1].style.display = "flex";
       }
       if (!document.querySelector(`[data-price='${productCode}']`)) {
         var newElement = $(".pricing-holder")[0].cloneNode(true);
@@ -2678,6 +2702,7 @@
       console.log("the price holder element");
       console.log(dataPrice);
       dataPrice[0].style.display = "none";
+      dataPrice[1].style.display = "none";
       chosenProductsMap.delete(productCode);
       totalPrice = parseInt(totalPrice) - parseInt(price);
       gstPrice = parseInt(totalPrice) * 0.18;
