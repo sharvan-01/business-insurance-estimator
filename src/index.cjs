@@ -286,6 +286,7 @@ $('.bi-plan').on('click', function (e) {
 
   //if asset insurance
   if (productCode === 'ai') {
+    chosenProductsMap.set('ai', new Map([['price', assetCost]]));
     console.log('asset insurance is working');
     const assetRadioButton = $(`[data-checkbox=${productCode}]`);
     checkTheCheckbox(assetRadioButton, productCode);
@@ -398,6 +399,11 @@ $('#avg-cost').change(function () {
   valueOfAssets = $('#avg-cost').val();
   if (valueOfAssets) {
     assetCost = parseInt(noOfAssets) * parseInt(valueOfAssets) * 0.0125;
+    //subtracting the previous asset cost from the total before proceding to add the new cost
+    const prevProdDeets = chosenProductsMap.get('ai');
+    const prevPrice = prevProdDeets.get('price');
+    totalPrice = parseInt(totalPrice) - parseInt(prevPrice);
+    //adding the new cost from here below
     totalPrice = parseInt(assetCost) + parseInt(totalPrice);
     grandTotal = parseInt(totalPrice) * 0.18 + parseInt(totalPrice);
     gstPrice = parseInt(totalPrice) * 0.18;

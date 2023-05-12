@@ -2404,6 +2404,7 @@
       return;
     }
     if (productCode === "ai") {
+      chosenProductsMap.set("ai", /* @__PURE__ */ new Map([["price", assetCost]]));
       console.log("asset insurance is working");
       const assetRadioButton = $(`[data-checkbox=${productCode}]`);
       checkTheCheckbox(assetRadioButton, productCode);
@@ -2505,6 +2506,9 @@
     valueOfAssets = $("#avg-cost").val();
     if (valueOfAssets) {
       assetCost = parseInt(noOfAssets) * parseInt(valueOfAssets) * 0.0125;
+      const prevProdDeets = chosenProductsMap.get("ai");
+      const prevPrice = prevProdDeets.get("price");
+      totalPrice = parseInt(totalPrice) - parseInt(prevPrice);
       totalPrice = parseInt(assetCost) + parseInt(totalPrice);
       grandTotal = parseInt(totalPrice) * 0.18 + parseInt(totalPrice);
       gstPrice = parseInt(totalPrice) * 0.18;
