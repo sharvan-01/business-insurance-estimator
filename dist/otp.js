@@ -23,7 +23,7 @@
     }
   }
   function startTimer() {
-    let remainingTimeElement = document.querySelector("#remainingTime"), secondsLeft = 5;
+    let remainingTimeElement = document.querySelector("#remainingTime"), secondsLeft = 10;
     const Timer = setInterval(() => {
       if (secondsLeft <= 0) {
         clearInterval(Timer);

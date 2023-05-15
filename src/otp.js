@@ -28,7 +28,7 @@ function buttonStatus() {
 }
 function startTimer() {
   let remainingTimeElement = document.querySelector('#remainingTime'),
-    secondsLeft = 5;
+    secondsLeft = 10;
 
   const Timer = setInterval(() => {
     if (secondsLeft <= 0) {
