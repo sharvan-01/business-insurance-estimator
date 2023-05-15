@@ -47,7 +47,7 @@ $('#second-continue').on('click', async function () {
   companyName = $('#bi-company').val();
   $('#insert-company-name')[0].innerHTML = companyName;
   $('#insert-company-2')[0].innerHTML = companyName;
-  if (!estimateExists) createDataTwo(true);
+  createDataTwo(true);
   modifySelectOptions(products);
 });
 
@@ -68,8 +68,6 @@ async function createContact(properties) {
     const data = await response.json();
     hubspotID = data.id;
     console.log('the identifier is: ' + hubspotID);
-
-    //const data = await response.json();
   } catch (error) {
     console.error(error);
   }
@@ -207,7 +205,7 @@ function createDataTwo() {
   values['property'] = properties;
   console.log('second continue button data');
   console.log(values.property);
-  //createContact(values.property);
+  createContact(values.property);
 }
 
 async function createDataThree() {
@@ -225,17 +223,17 @@ async function createDataThree() {
   values['properties'] = properties;
   console.log('third continue button data');
   console.log(values);
-  // try {
-  //   var result = await updateContact(values);
-  //   console.log(result);
-  // } catch (e) {
-  //   console.log(e);
-  // }
+  try {
+    var result = await updateContact(values);
+    console.log(result);
+  } catch (e) {
+    console.log(e);
+  }
 }
 //on final-submit we're showing a pop-up to book a call and submitting a record to HS
 
 $('#final-submit').on('click', function () {
-  //finalDataSubmit();
+  finalDataSubmit();
 });
 
 function finalDataSubmit() {

@@ -152,6 +152,7 @@ var modal = $('#bi-modal');
 var exitIntent = $('#exitIntent');
 var close = $('#bi-modal-close');
 $("[data-element='learn']").on('click', function () {
+  $('.background-color-plum-vision-dark').css('overflow', 'hidden'); //preventing scroll when the modal opens
   var productCode = $(this).attr('data-product');
   console.log(productCode);
   var modal = $('#bi-modal');
@@ -188,6 +189,7 @@ $('#final-submit').on('click', function () {
 });
 
 $("[data-element='close']").on('click', function () {
+  $('.background-color-plum-vision-dark').css('overflow', 'visible'); //re-enabling scroll
   modal.css('display', 'none');
   exitIntent.css('display', 'none');
   $('.business-body').css('overflow', 'visible');

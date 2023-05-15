@@ -10,6 +10,7 @@
     phone = $("#bi-phone").val();
     phone = parseInt(phone);
     phone = "+91" + phone;
+    getOTP(phone);
     startTimer();
   });
   function buttonStatus() {
@@ -62,7 +63,6 @@
     console.log(id);
   }
   $("#verify-otp").on("click", function() {
-    $("#otp-continue-button").click();
     verifyOTP();
   });
   async function verifyOTP() {

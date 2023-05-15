@@ -13,7 +13,7 @@ $('#second-continue').on('click', function () {
   // email = $('#bi-email').val();
   phone = parseInt(phone);
   phone = '+91' + phone;
-  //getOTP(phone); //get the OTP for this phone number
+  getOTP(phone); //get the OTP for this phone number
   startTimer(); //start timer for resend OTP function
 });
 
@@ -82,7 +82,7 @@ function saveID(result) {
 
 //call verify OTP function on button click
 $('#verify-otp').on('click', function () {
-  $('#otp-continue-button').click();
+  //$('#otp-continue-button').click();
   verifyOTP();
 });
 

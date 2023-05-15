@@ -73,6 +73,29 @@ before the index.js files function is getting triggered.
 
 
 
+You want to update the select field. By default three values exist, what if they didn't exist and you added options only after reading the sumInsured values?
+
+Method 1: Add the options through code.
+- Spot input fields relevant to each product and save it in a variable 
+- Iterate through the JSON of the product and get the sumInsured's and add it to the SELECT field
+- Do Object.keys(option).forEach((ele)=>{console.log(option[ele].value)}) and check if the current value exists 
+- Depending on that, add or skip. 
+- Loop through entire products variable and do this for every product
+
+
+What needs to be done once we have the product?
+- Choose product[1]
+- inside that we have fundingJSON which is an array of array's
+- iterate through fundingJSON and each array in it to get the SI's
+
+- you can get SELECT fields based on data-attribute of product name
+    - so looping through the products and for every product name we will search for it's respective SELECT field and add the options WITHOUT duplicates.
+    - so create an array and add the SI into the array only if it doesn't exist in the array. 
+
+
+
+
+
 How to show options based on the available SI's for a praticular product?
 - For each industry, each product has it's own SI 
 - We will need to read the Json for each product, get the SI, 
@@ -84,10 +107,25 @@ How to show options based on the available SI's for a praticular product?
          - do nothing
         - else
          - ID.remove(element.index)
+    - 
     
 
+    Object.keys(option).forEach((ele)=>{console.log(option[ele].value)})
 
 
+
+
+
+Asset insurance error:
+1. The asset insurance total is added to the main total 
+2. The asset insurance value is removed or modified, it does not reflect in the main total. 
+3. On removal of assetInsurance make subtraction to total and grandTotal or call the calcualtion ().
+
+
+12/05 5:00pm
+- I'm now creating a product in the chosenProductsMap when the plan is selected 
+    - the idea is that this will allow us to create this element at a different time than when the asset cost is edited. 
+    - 
 
 
 

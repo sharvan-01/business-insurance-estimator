@@ -2261,12 +2261,54 @@
     companyName = $("#bi-company").val();
     $("#insert-company-name")[0].innerHTML = companyName;
     $("#insert-company-2")[0].innerHTML = companyName;
-    if (!import_sharableURL.default)
-      createDataTwo(true);
+    createDataTwo(true);
     modifySelectOptions(products);
   });
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
+  async function createContact(properties) {
+    try {
+      const response = await fetch(
+        "https://business-insurance-estimator-sharvan-01.vercel.app/api/handler",
+        {
+          method: "POST",
+          headers: myHeaders,
+          body: JSON.stringify({ properties }),
+          mode: "cors"
+        }
+      );
+      const data2 = await response.json();
+      hubspotID = data2.id;
+      console.log("the identifier is: " + hubspotID);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  async function updateContact(properties) {
+    try {
+      console.log("the update properties object");
+      console.log(properties);
+      const response = await fetch(
+        "https://business-insurance-estimator-sharvan-01.vercel.app/api/handler",
+        {
+          method: "PATCH",
+          headers: myHeaders,
+          body: JSON.stringify(properties),
+          mode: "cors"
+        }
+      );
+      if (response.ok) {
+        const data2 = await response.json();
+        console.log("the data sent to update is:");
+        console.log(data2);
+      } else {
+        const errorData = await response.json();
+        console.log(errorData);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
   $("#bi-industry").change(function() {
     console.log("change event triggered");
     industryID = $("#bi-industry").val();
@@ -2354,6 +2396,7 @@
     values["property"] = properties;
     console.log("second continue button data");
     console.log(values.property);
+    createContact(values.property);
   }
   async function createDataThree() {
     var properties = {};
@@ -2370,9 +2413,25 @@
     values["properties"] = properties;
     console.log("third continue button data");
     console.log(values);
+    try {
+      var result = await updateContact(values);
+      console.log(result);
+    } catch (e) {
+      console.log(e);
+    }
   }
   $("#final-submit").on("click", function() {
+    finalDataSubmit();
   });
+  function finalDataSubmit() {
+    console.log("final submit data");
+    var products2 = Object.keys(Object.fromEntries(chosenProductsMap)).join(";");
+    var properties = {};
+    values["id"] = hubspotID;
+    properties["bi_products"] = products2;
+    values["properties"] = properties;
+    updateContact(values);
+  }
   function resetAllValues() {
     products.forEach((element) => {
       setSumInsuredFieldStatus(element[0], false);
