@@ -205,7 +205,7 @@ function createDataTwo() {
   values['property'] = properties;
   console.log('second continue button data');
   console.log(values.property);
-  createContact(values.property);
+  //createContact(values.property);
 }
 
 async function createDataThree() {
@@ -223,12 +223,12 @@ async function createDataThree() {
   values['properties'] = properties;
   console.log('third continue button data');
   console.log(values);
-  try {
-    var result = await updateContact(values);
-    console.log(result);
-  } catch (e) {
-    console.log(e);
-  }
+  // try {
+  //   var result = await updateContact(values);
+  //   console.log(result);
+  // } catch (e) {
+  //   console.log(e);
+  // }
 }
 //on final-submit we're showing a pop-up to book a call and submitting a record to HS
 
@@ -391,92 +391,107 @@ function assetInsuranceFieldStatus(aiSelectStatus) {
 //creating the pricing element
 $('#no-of-assets').change(function () {
   noOfAssets = $('#no-of-assets').val();
-  $('#avg-cost').trigger('change');
+  if (noOfAssets >= 1) {
+    $('#avg-cost').trigger('change');
+    $('#no-of-assets').removeClass('error');
+  } else {
+    $('#no-of-assets').addClass('error');
+  }
 });
 $('#avg-cost').change(function () {
   valueOfAssets = $('#avg-cost').val();
-  if (valueOfAssets) {
-    assetCost = parseInt(noOfAssets) * parseInt(valueOfAssets) * 0.0125;
-    //subtracting the previous asset cost from the total before proceding to add the new cost
-    const prevProdDeets = chosenProductsMap.get('ai');
-    const prevPrice = prevProdDeets.get('price');
-    totalPrice = parseInt(totalPrice) - parseInt(prevPrice);
-    //adding the new cost from here below
-    totalPrice = parseInt(assetCost) + parseInt(totalPrice);
-    grandTotal = parseInt(totalPrice) * 0.18 + parseInt(totalPrice);
-    gstPrice = parseInt(totalPrice) * 0.18;
-    chosenProductsMap.set('ai', new Map([['price', assetCost]]));
-    $("[data-si='ai']").val = assetCost;
-    const total = $("[data-element='total']")[0];
-    const gst = $("[data-element='gst']")[0];
-    const grandTotalElement = $("[data-element='grandTotal']")[0];
-    const mGT = $('#grandTotal-mobile')[0];
-    const mT = $('#total-mobile')[0];
-    const mGST = $('#gst-mobile')[0];
-    const mGTT = $('#grand-total-mobile')[0];
-    total.innerHTML = totalPrice.toLocaleString('en-IN', {
-      maximumFractionDigits: 0,
-      style: 'currency',
-      currency: 'INR',
-    });
-    mT.innerHTML = totalPrice.toLocaleString('en-IN', {
-      maximumFractionDigits: 0,
-      style: 'currency',
-      currency: 'INR',
-    });
-    mGTT.innerHTML = grandTotal.toLocaleString('en-IN', {
-      maximumFractionDigits: 0,
-      style: 'currency',
-      currency: 'INR',
-    });
-    mGST.innerHTML = gstPrice.toLocaleString('en-IN', {
-      maximumFractionDigits: 0,
-      style: 'currency',
-      currency: 'INR',
-    });
-    grandTotalElement.innerHTML = grandTotal.toLocaleString('en-IN', {
-      maximumFractionDigits: 0,
-      style: 'currency',
-      currency: 'INR',
-    });
-    mGTT.innerHTML = grandTotal.toLocaleString('en-IN', {
-      maximumFractionDigits: 0,
-      style: 'currency',
-      currency: 'INR',
-    });
-    mGT.innerHTML = grandTotal.toLocaleString('en-IN', {
-      maximumFractionDigits: 0,
-      style: 'currency',
-      currency: 'INR',
-    });
-    gst.innerHTML = gstPrice.toLocaleString('en-IN', {
-      maximumFractionDigits: 0,
-      style: 'currency',
-      currency: 'INR',
-    });
-    mGST.innerHTML = gstPrice.toLocaleString('en-IN', {
-      maximumFractionDigits: 0,
-      style: 'currency',
-      currency: 'INR',
-    });
-    let pricingElement = $("[data-price='ai']");
-    pricingElement = pricingElement[0];
-    pricingElement.childNodes[1].innerHTML = parseInt(assetCost).toLocaleString('en-IN', {
-      maximumFractionDigits: 0,
-      style: 'currency',
-      currency: 'INR',
-    });
-    let pricingElementMobile = $("[data-price='ai']");
-    pricingElementMobile = pricingElementMobile[1];
-    pricingElementMobile.childNodes[1].innerHTML = parseInt(assetCost).toLocaleString('en-IN', {
-      maximumFractionDigits: 0,
-      style: 'currency',
-      currency: 'INR',
-    });
-    console.log(pricingElementMobile.childNodes[1]);
-    console.log(pricingElementMobile.childNodes[1].innerHTML);
+  noOfAssets = $('#no-of-assets').val();
+  if (valueOfAssets >= 1) {
+    $('#avg-cost').removeClass('error');
+    if (valueOfAssets && noOfAssets > 1) {
+      calculateAssetInsurance();
+    }
+  } else {
+    $('#avg-cost').addClass('error');
   }
 });
+
+function calculateAssetInsurance() {
+  assetCost = parseInt(noOfAssets) * parseInt(valueOfAssets) * 0.0125;
+  //subtracting the previous asset cost from the total before proceding to add the new cost
+  const prevProdDeets = chosenProductsMap.get('ai');
+  const prevPrice = prevProdDeets.get('price');
+  totalPrice = parseInt(totalPrice) - parseInt(prevPrice);
+  //adding the new cost from here below
+  totalPrice = parseInt(assetCost) + parseInt(totalPrice);
+  grandTotal = parseInt(totalPrice) * 0.18 + parseInt(totalPrice);
+  gstPrice = parseInt(totalPrice) * 0.18;
+  chosenProductsMap.set('ai', new Map([['price', assetCost]]));
+  $("[data-si='ai']").val = assetCost;
+  const total = $("[data-element='total']")[0];
+  const gst = $("[data-element='gst']")[0];
+  const grandTotalElement = $("[data-element='grandTotal']")[0];
+  const mGT = $('#grandTotal-mobile')[0];
+  const mT = $('#total-mobile')[0];
+  const mGST = $('#gst-mobile')[0];
+  const mGTT = $('#grand-total-mobile')[0];
+  total.innerHTML = totalPrice.toLocaleString('en-IN', {
+    maximumFractionDigits: 0,
+    style: 'currency',
+    currency: 'INR',
+  });
+  mT.innerHTML = totalPrice.toLocaleString('en-IN', {
+    maximumFractionDigits: 0,
+    style: 'currency',
+    currency: 'INR',
+  });
+  mGTT.innerHTML = grandTotal.toLocaleString('en-IN', {
+    maximumFractionDigits: 0,
+    style: 'currency',
+    currency: 'INR',
+  });
+  mGST.innerHTML = gstPrice.toLocaleString('en-IN', {
+    maximumFractionDigits: 0,
+    style: 'currency',
+    currency: 'INR',
+  });
+  grandTotalElement.innerHTML = grandTotal.toLocaleString('en-IN', {
+    maximumFractionDigits: 0,
+    style: 'currency',
+    currency: 'INR',
+  });
+  mGTT.innerHTML = grandTotal.toLocaleString('en-IN', {
+    maximumFractionDigits: 0,
+    style: 'currency',
+    currency: 'INR',
+  });
+  mGT.innerHTML = grandTotal.toLocaleString('en-IN', {
+    maximumFractionDigits: 0,
+    style: 'currency',
+    currency: 'INR',
+  });
+  gst.innerHTML = gstPrice.toLocaleString('en-IN', {
+    maximumFractionDigits: 0,
+    style: 'currency',
+    currency: 'INR',
+  });
+  mGST.innerHTML = gstPrice.toLocaleString('en-IN', {
+    maximumFractionDigits: 0,
+    style: 'currency',
+    currency: 'INR',
+  });
+  let pricingElement = $("[data-price='ai']");
+  pricingElement = pricingElement[0];
+  pricingElement.childNodes[1].innerHTML = parseInt(assetCost).toLocaleString('en-IN', {
+    maximumFractionDigits: 0,
+    style: 'currency',
+    currency: 'INR',
+  });
+  let pricingElementMobile = $("[data-price='ai']");
+  pricingElementMobile = pricingElementMobile[1];
+  pricingElementMobile.childNodes[1].innerHTML = parseInt(assetCost).toLocaleString('en-IN', {
+    maximumFractionDigits: 0,
+    style: 'currency',
+    currency: 'INR',
+  });
+  console.log(pricingElementMobile.childNodes[1]);
+  console.log(pricingElementMobile.childNodes[1].innerHTML);
+}
 
 function assetInsurance(aiSelectStatus) {
   assetInsuranceFieldStatus(aiSelectStatus);
@@ -505,6 +520,8 @@ function assetInsurance(aiSelectStatus) {
   //if assetInsurance is deselected
   else {
     //subtracting the asset cost from the total
+    $('#avg-cost').removeClass('error');
+    $('#no-of-assets').removeClass('error');
     const dataPrice = $("[data-price='ai']");
     const priceElement = dataPrice[0].childNodes[1];
     priceElement.innerHTML = '0';
