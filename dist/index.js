@@ -2266,6 +2266,24 @@
   });
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
+  async function createContact(properties) {
+    try {
+      const response = await fetch(
+        "https://business-insurance-estimator-sharvan-01.vercel.app/api/handler",
+        {
+          method: "POST",
+          headers: myHeaders,
+          body: JSON.stringify({ properties }),
+          mode: "cors"
+        }
+      );
+      const data2 = await response.json();
+      hubspotID = data2.id;
+      console.log("the identifier is: " + hubspotID);
+    } catch (error) {
+      console.error(error);
+    }
+  }
   async function updateContact(properties) {
     try {
       console.log("the update properties object");
@@ -2378,6 +2396,7 @@
     values["property"] = properties;
     console.log("second continue button data");
     console.log(values.property);
+    createContact(values.property);
   }
   async function createDataThree() {
     var properties = {};
@@ -2394,6 +2413,12 @@
     values["properties"] = properties;
     console.log("third continue button data");
     console.log(values);
+    try {
+      var result = await updateContact(values);
+      console.log(result);
+    } catch (e) {
+      console.log(e);
+    }
   }
   $("#final-submit").on("click", function() {
     finalDataSubmit();

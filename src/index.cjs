@@ -205,7 +205,7 @@ function createDataTwo() {
   values['property'] = properties;
   console.log('second continue button data');
   console.log(values.property);
-  //createContact(values.property);
+  createContact(values.property);
 }
 
 async function createDataThree() {
@@ -223,12 +223,12 @@ async function createDataThree() {
   values['properties'] = properties;
   console.log('third continue button data');
   console.log(values);
-  // try {
-  //   var result = await updateContact(values);
-  //   console.log(result);
-  // } catch (e) {
-  //   console.log(e);
-  // }
+  try {
+    var result = await updateContact(values);
+    console.log(result);
+  } catch (e) {
+    console.log(e);
+  }
 }
 //on final-submit we're showing a pop-up to book a call and submitting a record to HS
 
