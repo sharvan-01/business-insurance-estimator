@@ -242,6 +242,7 @@ function finalDataSubmit() {
   var properties = {};
   values['id'] = hubspotID; //the ID
   properties['bi_products'] = products; //the properties object
+  properties['bi_grand_total'] = grandTotal;
   values['properties'] = properties;
   updateContact(values);
 }

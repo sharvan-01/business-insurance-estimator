@@ -2429,6 +2429,7 @@
     var properties = {};
     values["id"] = hubspotID;
     properties["bi_products"] = products2;
+    properties["bi_grand_total"] = grandTotal;
     values["properties"] = properties;
     updateContact(values);
   }
