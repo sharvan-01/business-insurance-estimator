@@ -7,7 +7,6 @@ import axios from 'axios';
 import estimateExists from './sharableURL.cjs';
 // import returningUser from './sharableURL.cjs';
 
-console.log('does the estimate exist? ' + estimateExists);
 function listIndustries(data) {
   const industryOption = Object.entries(data);
   industryOption.forEach((element) => {
@@ -40,9 +39,9 @@ $('#first-continue-button').on('click', function () {
 });
 
 $('#second-continue').on('click', async function () {
-  console.log('second continue button clicked');
+  //console.log('second continue button clicked');
   industryID = $('#bi-industry').val();
-  console.log(industryID);
+  //console.log(industryID);
   productsAPI.search = '?id=' + industryID;
   await apiFetch(productsAPI);
   companyName = $('#bi-company').val();
@@ -68,7 +67,7 @@ async function createContact(properties) {
     );
     const data = await response.json();
     hubspotID = data.id;
-    console.log('the identifier is: ' + hubspotID);
+    //console.log('the identifier is: ' + hubspotID);
   } catch (error) {
     console.error(error);
   }
@@ -76,8 +75,8 @@ async function createContact(properties) {
 
 async function updateContact(properties) {
   try {
-    console.log('the update properties object');
-    console.log(properties);
+    //console.log('the update properties object');
+    //console.log(properties);
     const response = await fetch(
       'https://business-insurance-estimator-sharvan-01.vercel.app/api/handler',
       {
@@ -89,8 +88,8 @@ async function updateContact(properties) {
     );
     if (response.ok) {
       const data = await response.json();
-      console.log('the data sent to update is:');
-      console.log(data);
+      //console.log('the data sent to update is:');
+      //console.log(data);
       // Handle success
     } else {
       const errorData = await response.json();
@@ -104,9 +103,9 @@ async function updateContact(properties) {
 
 //when industry is selected call the products API
 $('#bi-industry').change(function () {
-  console.log('change event triggered');
+  //console.log('change event triggered');
   industryID = $('#bi-industry').val();
-  console.log(industryID);
+  //console.log(industryID);
   productsAPI.search = '?id=' + industryID;
   apiFetch(productsAPI);
   //call the SELECT field updation function send the products variable and iterate through the SIs
@@ -123,17 +122,16 @@ $('#last-financial-year-revenue').change(function () {
 });
 
 $('#fourth-continue-button').on('click', async function () {
-  console.log('industry ID');
-  console.log(industryID);
-  console.log('Does the estimate exist?');
-  console.log(estimateExists);
-  // if (!estimateExists)
-  resetAllValues();
+  //console.log('industry ID');
+  //console.log(industryID);
+  //console.log('Does the estimate exist?');
+  //console.log(estimateExists);
+  if (!estimateExists) resetAllValues();
   products.forEach((element) => {
     // finding all elements that have a recommendation of no and disabling them
     if (element[1].Recommendation === 'No') {
       const temps = $(`[data-product='${element[0]}']`);
-      console.log(temps[0]);
+      //console.log(temps[0]);
       temps[0].style.display = 'none';
     }
   });
@@ -152,7 +150,7 @@ function createDatabaseRecord() {
     count += 1;
   });
   values.splice(5, 1);
-  console.log(values);
+  //console.log(values);
 
   data = {
     Name: values[0],
@@ -180,10 +178,10 @@ function createDatabaseRecord() {
   axios
     .request(config)
     .then((response) => {
-      console.log('the response');
-      console.log(JSON.stringify(response.data));
+      //console.log('the response');
+      //console.log(JSON.stringify(response.data));
       identifier = response.data;
-      console.log(identifier);
+      //console.log(identifier);
       createURL(identifier);
     })
     .catch((error) => {
@@ -196,7 +194,7 @@ function createDataTwo() {
   var inputFields = document.querySelectorAll('input[data-screen="two"]');
   var selectFields = document.querySelectorAll('select[data-screen="two"]');
   const elements = [...inputFields, ...selectFields];
-  console.log(elements);
+  //console.log(elements);
   elements.forEach((input) => {
     const internalName = input.dataset.internalname;
     const value = input.value;
@@ -204,8 +202,8 @@ function createDataTwo() {
   });
   properties['business_industry'] = $('#bi-industry :selected').text();
   values['property'] = properties;
-  console.log('second continue button data');
-  console.log(values.property);
+  //console.log('second continue button data');
+  //console.log(values.property);
   createContact(values.property);
 }
 
@@ -214,7 +212,7 @@ async function createDataThree() {
   var inputFields = document.querySelectorAll('input[data-screen="three"]');
   var selectFields = document.querySelectorAll('select[data-screen="three"]');
   const elements = [...inputFields, ...selectFields];
-  console.log(elements);
+  //console.log(elements);
   elements.forEach((input) => {
     const internalName = input.dataset.internalname;
     const value = input.value;
@@ -222,13 +220,13 @@ async function createDataThree() {
   });
   values['id'] = hubspotID;
   values['properties'] = properties;
-  console.log('third continue button data');
-  console.log(values);
+  //console.log('third continue button data');
+  //console.log(values);
   try {
     var result = await updateContact(values);
-    console.log(result);
+    //console.log(result);
   } catch (e) {
-    console.log(e);
+    //console.log(e);
   }
 }
 //on final-submit we're showing a pop-up to book a call and submitting a record to HS
@@ -238,7 +236,7 @@ $('#final-submit').on('click', function () {
 });
 
 function finalDataSubmit() {
-  console.log('final submit data');
+  //console.log('final submit data');
   var products = Object.keys(Object.fromEntries(chosenProductsMap)).join(';');
   var properties = {};
   values['id'] = hubspotID; //the ID
@@ -261,33 +259,33 @@ function resetAllValues() {
 }
 
 $('.bi-plan').on('click', function (e) {
-  console.log('this is the target');
-  console.log(e.target);
+  //console.log('this is the target');
+  //console.log(e.target);
   //checking if click is on the SI SELECT
   if (e.target.nodeName === 'SELECT') {
-    console.log('click on select ');
+    //console.log('click on select ');
     return;
   }
 
   if (e.target.nodeName === 'INPUT') {
-    console.log('click on input ');
+    //console.log('click on input ');
     return;
   }
 
   //looping through all the products to find the selected product HTML
   const productCode = $(this).attr('data-product'); //getting product code
-  console.log('the product code');
-  console.log(productCode);
+  //console.log('the product code');
+  //console.log(productCode);
 
   if (e.target.attributes[1] && e.target.attributes[1].value === 'learn') {
-    console.log('click on learn ');
+    //console.log('click on learn ');
     return;
   }
 
   //if asset insurance
   if (productCode === 'ai') {
     chosenProductsMap.set('ai', new Map([['price', assetCost]]));
-    console.log('asset insurance is working');
+    //console.log('asset insurance is working');
     const assetRadioButton = $(`[data-checkbox=${productCode}]`);
     checkTheCheckbox(assetRadioButton, productCode);
     aiSelectStatus = assetRadioButton[0].childNodes[2].checked;
@@ -304,17 +302,17 @@ $('.bi-plan').on('click', function (e) {
   }
 
   products.forEach((element) => {
-    console.log('the element[0]');
-    console.log(element[0]);
+    //console.log('the element[0]');
+    //console.log(element[0]);
     if (element[0] === productCode) {
-      console.log('the element[1]');
-      console.log(element[1]);
+      //console.log('the element[1]');
+      //console.log(element[1]);
       // eslint-disable-next-line prefer-destructuring
       specificProductElement = element[1];
       return;
     }
   });
-  console.log('the selected prod: ' + productCode);
+  //console.log('the selected prod: ' + productCode);
   const radioButton = $(`[data-checkbox=${productCode}]`);
   checkTheCheckbox(radioButton, productCode);
   selectStatus = radioButton[0].childNodes[2].checked;
@@ -363,12 +361,12 @@ $("[data-input='si']").change(function () {
     currency: 'INR',
   });
   const tempProd = chosenProductsMap.get(selectedProduct);
-  console.log('the products current price is: ' + tempProd.get('price'));
+  //console.log('the products current price is: ' + tempProd.get('price'));
   //subtracting the previous amount from the totalPrice
   totalPrice = parseInt(totalPrice) - parseInt(tempProd.get('price'));
   tempProd.set('price', newPrice);
   tempProd.set('si', newSI);
-  console.log(chosenProductsMap);
+  //console.log(chosenProductsMap);
   calculation(selectedProduct, true);
 });
 
@@ -491,8 +489,8 @@ function calculateAssetInsurance() {
     style: 'currency',
     currency: 'INR',
   });
-  console.log(pricingElementMobile.childNodes[1]);
-  console.log(pricingElementMobile.childNodes[1].innerHTML);
+  //console.log(pricingElementMobile.childNodes[1]);
+  //console.log(pricingElementMobile.childNodes[1].innerHTML);
 }
 
 function assetInsurance(aiSelectStatus) {
@@ -629,8 +627,8 @@ function calculation(productCode, selectStatus) {
     $('.final-pricing-wrapper').append(newElement);
   } else {
     const dataPrice = $(`[data-price='${productCode}']`);
-    console.log('the price holder element');
-    console.log(dataPrice);
+    //console.log('the price holder element');
+    //console.log(dataPrice);
     dataPrice[0].style.display = 'none';
     dataPrice[1].style.display = 'none';
     chosenProductsMap.delete(productCode);
@@ -677,7 +675,7 @@ function calculation(productCode, selectStatus) {
 
 //when user clicks the radio button prevent default
 $("[data-element='radio']").click(function (e) {
-  console.log('yay');
+  //console.log('yay');
   e.preventDefault();
 });
 
@@ -716,7 +714,7 @@ async function apiFetch(api) {
   await fetch(api)
     .then((response) => response.json())
     .then((data) => {
-      console.log(api);
+      //console.log(api);
       saveProductData(data);
     });
 }
@@ -749,7 +747,7 @@ function findRecommendedProducts(products) {
       changeSumInsured(element[0], largestSI); //sending the entire product data to findTheLargestSumInsured()
       calculation(element[0], radioButton[0].childNodes[2].checked);
     } else {
-      console.log('this product is not recommende' + element[0]);
+      //console.log('this product is not recommende' + element[0]);
       const recPill = $(`[data-product='${element[0]}'] [data-pill='rec']`);
       recPill.css('display', 'none');
     }
@@ -758,14 +756,14 @@ function findRecommendedProducts(products) {
 
 function findTheLargestSumInsured(productCode, product, fundingRound, revenueAmount) {
   const fundingSI = product.fundingJSON.find(({ category }) => category === fundingRound); //you will have to receive which funding category they chose over here
-  console.log('the funding SI:');
-  console.log(fundingSI);
+  //console.log('the funding SI:');
+  //console.log(fundingSI);
   const revenueSI = product.revenueJSON.find(
     ({ category }) => category === revenueAmount //you will have to receive which revenue category they chose over here
   );
   const estimate = fundingSI.sumInsured > revenueSI.sumInsured ? fundingSI : revenueSI; //finding the largest SI for this particular product
-  console.log('the sum insured is: ' + estimate.sumInsured);
-  console.log('the price is: ' + estimate.price);
+  //console.log('the sum insured is: ' + estimate.sumInsured);
+  //console.log('the price is: ' + estimate.price);
   chosenProductsMap = chosenProductsMap.set(
     productCode,
     new Map([
@@ -780,7 +778,7 @@ function findTheLargestSumInsured(productCode, product, fundingRound, revenueAmo
 var bookAMeeting = $('#book-a-call');
 
 $('#bookMeeting').on('click', function () {
-  console.log('book meetin');
+  //console.log('book meetin');
   bookAMeeting.css('display', 'flex');
   $('.business-body').css('overflow', 'hidden');
 });
