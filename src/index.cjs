@@ -1,6 +1,7 @@
 /* eslint-disable prefer-destructuring */
 //adding industries to the SELECT field on the UI
 
+import { Analytics } from '@vercel/analytics/react';
 import axios from 'axios';
 
 import estimateExists from './sharableURL.cjs';
