@@ -89,7 +89,7 @@ async function updateContact(properties) {
       const data = await response.json();
       console.log('the data sent to update is:');
       console.log(data);
-      Handle success
+      //Handle success
     } else {
       const errorData = await response.json();
       console.log(errorData);
