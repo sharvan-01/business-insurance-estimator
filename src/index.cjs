@@ -211,7 +211,7 @@ async function createDataThree() {
   var inputFields = document.querySelectorAll('input[data-screen="three"]');
   var selectFields = document.querySelectorAll('select[data-screen="three"]');
   const elements = [...inputFields, ...selectFields];
-  //console.log(elements);
+  console.log(elements);
   elements.forEach((input) => {
     const internalName = input.dataset.internalname;
     const value = input.value;
@@ -219,11 +219,11 @@ async function createDataThree() {
   });
   values['id'] = hubspotID;
   values['properties'] = properties;
-  //console.log('third continue button data');
-  //console.log(values);
+  console.log('third continue button data');
+  console.log(values);
   try {
     var result = await updateContact(values);
-    //console.log(result);
+    console.log(result);
   } catch (e) {
     //console.log(e);
   }
