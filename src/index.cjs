@@ -74,8 +74,8 @@ async function createContact(properties) {
 
 async function updateContact(properties) {
   try {
-    //console.log('the update properties object');
-    //console.log(properties);
+    console.log('the update properties object');
+    console.log(properties);
     const response = await fetch(
       'https://business-insurance-estimator-sharvan-01.vercel.app/api/handler',
       {
@@ -87,9 +87,9 @@ async function updateContact(properties) {
     );
     if (response.ok) {
       const data = await response.json();
-      //console.log('the data sent to update is:');
-      //console.log(data);
-      // Handle success
+      console.log('the data sent to update is:');
+      console.log(data);
+      Handle success
     } else {
       const errorData = await response.json();
       console.log(errorData);
